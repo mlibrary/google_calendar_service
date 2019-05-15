@@ -11,15 +11,16 @@ INTRODUCTION
 REQUIREMENTS
 ------------
 
-  * To install the module it needs to run before composer require google/apiclient
+  * To install the module it needs to run before
+  "composer require google/apiclient".
 
 
 INSTALLATION
 ------------
-
+  * Run "composer require google/apiclient" before installation.
   * The module can be installed like other modules.
-  * Once the module has been installed, navigate to admin/config/calendar/settings
-    and configure the settings.
+  * Once the module has been installed, navigate to
+  "admin/config/calendar/settings" and configure the settings.
 
 
 CONFIGURATION

@@ -42,10 +42,9 @@ class CalendarHtmlRouteProvider extends AdminHtmlRouteProvider {
     $type = $entity_type->id() == "gcs_calendar" ? "gcs_calendar" : "event";
     $route = new Route("/admin/calendar/$type/settings");
     $route->setDefaults([
-        '_form' => 'Drupal\google_calendar_service\Form\CalendarSettingsForm',
-        '_title' => "{$entity_type->getLabel()} settings",
-      ])
-      ->setRequirement('_permission', $entity_type->getAdminPermission())
+      '_form' => 'Drupal\google_calendar_service\Form\CalendarSettingsForm',
+      '_title' => "{$entity_type->getLabel()} settings",
+    ])->setRequirement('_permission', $entity_type->getAdminPermission())
       ->setOption('_admin_route', TRUE);
 
     return $route;

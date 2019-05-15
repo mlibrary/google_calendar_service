@@ -22,7 +22,7 @@ class CalendarAccessControlHandler extends EntityAccessControlHandler {
     $operation,
     AccountInterface $account) {
 
-    /** @var \Drupal\google_calendar_service\Entity\GoogleCalendarInterface */
+    // @var \Drupal\google_calendar_service\Entity\GoogleCalendarInterface.
     switch ($operation) {
       case 'view':
         if (!$entity->isPublished()) {

@@ -38,25 +38,25 @@ class CalendarEventForm extends ContentEntityForm {
   /**
    * CalendarEventForm constructor.
    *
-   * @param EntityManagerInterface $entity_manager
+   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity type manager.
-   * @param EntityTypeBundleInfoInterface|null $entity_type_bundle_info
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
    *   The entity type bundle info.
-   * @param TimeInterface|null $time
+   * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time interface.
-   * @param CalendarEditEvents $editEvent
+   * @param \Drupal\google_calendar_service\CalendarEditEvents $editEvent
    *   The calendar edit events service.
-   * @param MessengerInterface $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
    */
   public function __construct(
     EntityManagerInterface $entity_manager,
-    EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
+    EntityTypeBundleInfoInterface $bundle_info = NULL,
     TimeInterface $time = NULL,
     CalendarEditEvents $editEvent,
     MessengerInterface $messenger) {
 
-    parent::__construct($entity_manager, $entity_type_bundle_info, $time);
+    parent::__construct($entity_manager, $bundle_info, $time);
     $this->editEvent = $editEvent;
     $this->messenger = $messenger;
   }

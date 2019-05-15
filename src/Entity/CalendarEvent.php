@@ -249,11 +249,11 @@ class CalendarEvent extends ContentEntityBase implements
       ->setDescription(t('The calendar this event is part of.'))
       ->setSetting('target_type', 'gcs_calendar')
       ->setSetting('handler', 'default')
-      ->setDisplayOptions('view', array(
+      ->setDisplayOptions('view', [
         'label'  => 'hidden',
         'type'   => 'gcs_calendar',
         'weight' => 0,
-      ))
+      ])
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['description'] = BaseFieldDefinition::create('text_long')

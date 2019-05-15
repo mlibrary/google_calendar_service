@@ -29,7 +29,7 @@ class CalendarImportProcessor extends QueueWorkerBase implements
   /**
    * CalendarImportProcessor constructor.
    *
-   * @param CalendarImport $calendar_import
+   * @param \Drupal\google_calendar_service\CalendarImport $calendar_import
    *   The calendar import service.
    */
   public function __construct(CalendarImport $calendar_import) {

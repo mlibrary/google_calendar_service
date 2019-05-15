@@ -39,13 +39,13 @@ class CalendarImportController extends ControllerBase {
   /**
    * Constructs a CalendarImport object.
    *
-   * @param CalendarImport $calendar_import
+   * @param \Drupal\google_calendar_service\CalendarImport $calendar_import
    *   The calendar import.
-   * @param RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack manager.
-   * @param MessengerInterface $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
-   * @param EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
   public function __construct(

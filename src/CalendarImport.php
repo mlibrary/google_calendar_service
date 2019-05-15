@@ -29,14 +29,14 @@ class CalendarImport {
   /**
    * Logger.
    *
-   * @var \Psr\Log\LoggerInterface
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
   protected $logger;
 
   /**
    * The config.
    *
-   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
+   * @var \Drupal\Core\Config\ConfigFactory
    */
   protected $config;
 
@@ -50,27 +50,27 @@ class CalendarImport {
   /**
    * CalendarImport constructor.
    *
-   * @param Google_Client $google_client
+   * @param \Google_Client $google_client
    *   The google client.
-   * @param ConfigFactory $config
+   * @param \Drupal\Core\Config\ConfigFactory $config
    *   The config.
-   * @param EntityTypeManagerInterface $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param LoggerChannelFactoryInterface $loggerChannelFactory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory.
    */
   public function __construct(
     Google_Client $google_client,
     ConfigFactory $config,
     EntityTypeManagerInterface $entityTypeManager,
-    LoggerChannelFactoryInterface $loggerChannelFactory) {
+    LoggerChannelFactoryInterface $logger) {
 
     $this->service = new Google_Service_Calendar($google_client);
     $this->config = $config->getEditable(
       'google_calendar_service.last_imports'
     );
     $this->entityTypeManager = $entityTypeManager;
-    $this->logger = $loggerChannelFactory->get('google_calendar_service');
+    $this->logger = $logger->get('google_calendar_service');
   }
 
   /**

@@ -39,11 +39,11 @@ class ImportEventsForm extends FormBase {
   /**
    * ImportEventsForm constructor.
    *
-   * @param CalendarImport $google_calendar_service
+   * @param \Drupal\google_calendar_service\GoogleCalendarImport $google_calendar_service
    *   The calendar import.
-   * @param EntityTypeManagerInterface $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param MessengerInterface $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
    */
   public function __construct(

@@ -61,12 +61,13 @@ class CalendarListBuilder extends EntityListBuilder {
     $operations['import'] = [
       'title' => $this->t('Import Events'),
       'weight' => 15,
-      'url' => Url::fromRoute("google_calendar_service.import_controller",
+      'url' => Url::fromRoute(
+        'google_calendar_service.import_controller',
         [
           'calendar' => $entity->id(),
         ]
-      ],
-    );
+      )
+    ];
 
     $operations['events'] = [
       'title' => t('List Events'),

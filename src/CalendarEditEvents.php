@@ -80,6 +80,8 @@ class CalendarEditEvents {
    *   The event id.
    * @param array $data
    *   The data.
+   * @param string $timezone
+   *   The timezone.
    */
   public function patchCalendar($calendarId, $eventId, array $data, $timezone) {
     $event = $this->service->events->get($calendarId, $eventId);
@@ -178,6 +180,7 @@ class CalendarEditEvents {
     }
     catch (Google_Service_Exception $e) {
       // Catch non-authorized exception.
+      dpm('wwwwww');
       if ($e->getCode() == 401) {
         return FALSE;
       }
