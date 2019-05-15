@@ -13,6 +13,7 @@ use Drupal\google_calendar_service\CalendarEditEvents;
 use Drupal\google_calendar_service\Entity\Calendar;
 use Google_Service_Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\user\PrivateTempStoreFactory;
 
 /**
  * Form controller for Google Calendar Event edit forms.
@@ -36,6 +37,13 @@ class CalendarEventForm extends ContentEntityForm {
   protected $messenger;
 
   /**
+   * The Private tempstore.
+   *
+   * @var \Drupal\user\PrivateTempStoreFactory
+   */
+  protected $tempstore;
+
+  /**
    * CalendarEventForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
@@ -48,17 +56,21 @@ class CalendarEventForm extends ContentEntityForm {
    *   The calendar edit events service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
+   * @param \Drupal\user\PrivateTempStoreFactory $tempstore
+   *   The messenger service.
    */
   public function __construct(
     EntityManagerInterface $entity_manager,
     EntityTypeBundleInfoInterface $bundle_info = NULL,
     TimeInterface $time = NULL,
     CalendarEditEvents $editEvent,
-    MessengerInterface $messenger) {
+    MessengerInterface $messenger,
+    PrivateTempStoreFactory $tempstore) {
 
     parent::__construct($entity_manager, $bundle_info, $time);
     $this->editEvent = $editEvent;
     $this->messenger = $messenger;
+    $this->tempstore = $tempstore;
   }
 
   /**
@@ -70,7 +82,8 @@ class CalendarEventForm extends ContentEntityForm {
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),
       $container->get('google_calendar_service.edit_events'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('user.private_tempstore')
     );
   }
 
@@ -122,8 +135,7 @@ class CalendarEventForm extends ContentEntityForm {
     }
 
     // Get calendar id.
-    $tempStore = \Drupal::service('user.private_tempstore')
-      ->get('google_calendar_service');
+    $tempStore = $this->tempstore->get('google_calendar_service');
     $calendarId = $tempStore->get('calendarId');
 
     switch ($status) {

@@ -104,7 +104,6 @@ class CalendarSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('google_calendar_service.default');
-    $file_storage = $this->entityManager->getStorage('file');
 
     $form['setup_steps_info'] = [
       '#type' => 'fieldset',
