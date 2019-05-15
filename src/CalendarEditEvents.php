@@ -180,7 +180,6 @@ class CalendarEditEvents {
     }
     catch (Google_Service_Exception $e) {
       // Catch non-authorized exception.
-      dpm('wwwwww');
       if ($e->getCode() == 401) {
         return FALSE;
       }

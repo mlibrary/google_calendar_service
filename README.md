@@ -24,10 +24,11 @@ INSTALLATION
 
 
 CONFIGURATION
-  * Go to https://console.developers.google.com/projectcreate and create your project.
+  * Go to https://console.developers.google.com/projectcreate and create your
+  project.
   * Navigate to Google Api's list and enable "Google Calendar API".
-  * Create credentials for your API, using the hint from the enabled Google Calendar API
-   page or https://console.developers.google.com/apis/credentials
+  * Create credentials for your API, using the hint from the enabled Google
+  Calendar API page or https://console.developers.google.com/apis/credentials
   * Create "OAuth client ID".
   * Download Your Secret Client JSON and upload it on the below form.
   * Upload the secret client file.
@@ -36,5 +37,5 @@ CONFIGURATION
 
   Setting up the Google Calendar:
   * On the "Share this Calendar" tab add the service account id. Give permission
-  "Make changes to events". This permission is required in order to make changes to
-  events from the Drupal site.
+  "Make changes to events". This permission is required in order to make changes
+  to events from the Drupal site.

@@ -34,6 +34,13 @@ class CalendarSettingsForm extends ConfigFormBase {
   protected $messenger;
 
   /**
+   * The file_system.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Constructs a UserPasswordForm object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -44,6 +51,8 @@ class CalendarSettingsForm extends ConfigFormBase {
    *   The core entity type manager.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file_system.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -227,7 +236,7 @@ class CalendarSettingsForm extends ConfigFormBase {
    *   The current state of the form.
    */
   public function removeSecretClientFile(
-    rray &$form,
+    array &$form,
     FormStateInterface $form_state) {
 
     $config = $this->config('google_calendar_service.default');

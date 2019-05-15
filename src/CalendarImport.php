@@ -76,7 +76,7 @@ class CalendarImport {
   /**
    * The import of calendar events.
    *
-   * @param Calendar $calendar
+   * @param \Drupal\google_calendar_service\Entity\Calendar $calendar
    *   The calendar.
    * @param bool $ignore_sync_token
    *   The sync token.

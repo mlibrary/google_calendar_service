@@ -16,9 +16,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 class ImportEventsForm extends FormBase {
 
   /**
-   * Drupal\google_calendar_service\GoogleCalendarImport definition.
+   * Drupal\google_calendar_service\CalendarImport.
    *
-   * @var \Drupal\google_calendar_service\GoogleCalendarImport
+   * @var \Drupal\google_calendar_service\CalendarImport
    */
   protected $calendarService;
 
@@ -39,7 +39,7 @@ class ImportEventsForm extends FormBase {
   /**
    * ImportEventsForm constructor.
    *
-   * @param \Drupal\google_calendar_service\GoogleCalendarImport $google_calendar_service
+   * @param \Drupal\google_calendar_service\CalendarImport $google_calendar_service
    *   The calendar import.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
@@ -84,13 +84,6 @@ class ImportEventsForm extends FormBase {
     ];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
   }
 
   /**
@@ -159,7 +152,7 @@ class ImportEventsForm extends FormBase {
     }
 
     $batch = [
-      'title' => t('Importing Calendars'),
+      'title' => $this->t('Importing Calendars'),
       'operations' => $operations,
       'finished' => '\Drupal\google_calendar_service\Form\ImportEventsForm::batchProcessCallback',
     ];

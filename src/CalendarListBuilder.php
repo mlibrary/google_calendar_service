@@ -66,7 +66,7 @@ class CalendarListBuilder extends EntityListBuilder {
         [
           'calendar' => $entity->id(),
         ]
-      )
+      ),
     ];
 
     $operations['events'] = [
