@@ -69,9 +69,6 @@ function google_calendar_service_cron() {
  *   - attributes: HTML attributes for the containing element.
  */
 function google_calendar_service_preprocess_calendar_event(array &$variables) {
-  // Fetch CalendarEntity Entity Object.
-  $calendar_event = $variables['elements']['#gcs_calendar_event'];
-
   // Helpful $content variable for templates.
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
@@ -89,9 +86,6 @@ function google_calendar_service_preprocess_calendar_event(array &$variables) {
  *   - attributes: HTML attributes for the containing element.
  */
 function google_calendar_service_preprocess_google_calendar(array &$variables) {
-  // Fetch GoogleCalendarEntity Entity Object.
-  $calendar = $variables['elements']['#gcs_calendar'];
-
   // Helpful $content variable for templates.
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];

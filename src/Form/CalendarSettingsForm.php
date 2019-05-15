@@ -114,7 +114,7 @@ class CalendarSettingsForm extends ConfigFormBase {
     ];
 
     $form['setup_steps_info']['setup_steps'] = [
-      '#markup' => t(
+      '#markup' => $this->t(
       '<ol>
       <li>
       Go to <a href="https://console.developers.google.com/projectcreate"
@@ -134,8 +134,6 @@ class CalendarSettingsForm extends ConfigFormBase {
     ];
 
     if ($file_uri = $config->get('secret_file_uri')) {
-      $file = $file_storage->loadByProperties(['uri' => $file_uri]);
-      $file_real_path = $this->fileSystem->realpath($file_uri);
       $file_url = Url::fromUserInput(
         file_url_transform_relative(file_create_url($file_uri))
       );
@@ -215,7 +213,7 @@ class CalendarSettingsForm extends ConfigFormBase {
         'Client Secret file has been uploaded successfully.'
       ));
     }
-    elseif ($file_uri = $config->get('secret_file_uri')) {
+    elseif ($config->get('secret_file_uri')) {
       $this->messenger->addMessage($this->t(
         'Changes has been applied.'
       ));
