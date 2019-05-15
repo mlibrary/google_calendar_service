@@ -17,9 +17,9 @@ class CalendarListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-
     $header['name'] = $this->t('Name');
     $header['id'] = $this->t('Google Calendar ID');
+
     return $header + parent::buildHeader();
   }
 
@@ -30,6 +30,7 @@ class CalendarListBuilder extends EntityListBuilder {
     /* @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendar */
     $row['name'] = $entity->label();
     $row['id'] = $entity->getGoogleCalendarId();
+
     return $row + parent::buildRow($entity);
   }
 
@@ -37,44 +38,44 @@ class CalendarListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   protected function getDefaultOperations(EntityInterface $entity) {
-    $operations = array();
-    if ($entity
-      ->access('update') && $entity
-      ->hasLinkTemplate('edit-form')) {
-      $operations['edit'] = array(
-        'title' => $this
-          ->t('Edit'),
+    $operations = [];
+    if ($entity->access('update') &&
+        $entity->hasLinkTemplate('edit-form')) {
+
+      $operations['edit'] = [
+        'title' => $this->t('Edit'),
         'weight' => 10,
-        'url' => $entity
-          ->urlInfo('edit-form'),
-      );
+        'url' => $entity->urlInfo('edit-form'),
+      ];
     }
-    if ($entity
-      ->access('delete') && $entity
-      ->hasLinkTemplate('delete-form')) {
-      $operations['delete'] = array(
-        'title' => $this
-          ->t('Delete'),
+    if ($entity->access('delete') &&
+        $entity->hasLinkTemplate('delete-form')) {
+
+      $operations['delete'] = [
+        'title' => $this->t('Delete'),
         'weight' => 100,
-        'url' => $entity
-          ->urlInfo('delete-form'),
-      );
+        'url' => $entity->urlInfo('delete-form'),
+      ];
     }
 
-    $operations['import'] = array(
-      'title' => t('Import Events'),
+    $operations['import'] = [
+      'title' => $this->t('Import Events'),
       'weight' => 15,
       'url' => Url::fromRoute("google_calendar_service.import_controller",
         [
           'calendar' => $entity->id(),
         ]
-      ),
+      ],
     );
-    $operations['events'] = array(
+
+    $operations['events'] = [
       'title' => t('List Events'),
       'weight' => 15,
-      'url' => Url::fromUserInput("/admin/extened-google-calendar/" . $entity->id() . "/events"),
-    );
+      'url' => Url::fromUserInput(
+        '/admin/extened-google-calendar/' . $entity->id() . '/events'
+      ),
+    ];
+
     return $operations;
   }
 

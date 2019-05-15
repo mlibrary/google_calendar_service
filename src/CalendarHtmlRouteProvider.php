@@ -41,8 +41,7 @@ class CalendarHtmlRouteProvider extends AdminHtmlRouteProvider {
   protected function getSettingsFormRoute(EntityTypeInterface $entity_type) {
     $type = $entity_type->id() == "gcs_calendar" ? "gcs_calendar" : "event";
     $route = new Route("/admin/calendar/$type/settings");
-    $route
-      ->setDefaults([
+    $route->setDefaults([
         '_form' => 'Drupal\google_calendar_service\Form\CalendarSettingsForm',
         '_title' => "{$entity_type->getLabel()} settings",
       ])

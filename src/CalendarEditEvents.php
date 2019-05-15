@@ -55,9 +55,17 @@ class CalendarEditEvents {
   /**
    * Constructor.
    */
-  public function __construct(Google_Client $google_client, ConfigFactory $config, EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $loggerChannelFactory, AccountInterface $current_user) {
+  public function __construct(
+    Google_Client $google_client,
+    ConfigFactory $config,
+    EntityTypeManagerInterface $entityTypeManager,
+    LoggerChannelFactoryInterface $loggerChannelFactory,
+    AccountInterface $current_user) {
+
     $this->service = new Google_Service_Calendar($google_client);
-    $this->config = $config->getEditable('google_calendar_service.last_imports');
+    $this->config = $config->getEditable(
+      'google_calendar_service.last_imports'
+    );
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $loggerChannelFactory->get('google_calendar_service');
     $this->current_user = $current_user;
@@ -127,14 +135,24 @@ class CalendarEditEvents {
    * @return \Google_Service_Calendar_Event
    *   Return calendar event.
    */
-  public function addCalendarEvent($calendarId, $eventSummary, $eventLocation, $eventDescription, $eventStart, $eventEnd, $timezone) {
+  public function addCalendarEvent(
+    $calendarId,
+    $eventSummary,
+    $eventLocation,
+    $eventDescription,
+    $eventStart,
+    $eventEnd,
+    $timezone) {
+
     $event = new \Google_Service_Calendar_Event($eventSummary);
     if (isset($eventSummary)) {
       $event->setSummary($eventSummary);
     }
+
     if (isset($eventLocation)) {
       $event->setLocation($eventLocation);
     }
+
     if (isset($eventStart)) {
       $start_timestamp = strtotime($eventStart);
       $start = new \Google_Service_Calendar_EventDateTime();
@@ -142,6 +160,7 @@ class CalendarEditEvents {
       $start->setTimeZone($timezone);
       $event->setStart($start);
     }
+
     if (isset($eventEnd)) {
       $end_timestamp = strtotime($eventEnd);
       $end = new \Google_Service_Calendar_EventDateTime();
@@ -149,6 +168,7 @@ class CalendarEditEvents {
       $end->setTimeZone($timezone);
       $event->setEnd($end);
     }
+
     if (isset($eventDescription)) {
       $event->setDescription($eventDescription);
     }

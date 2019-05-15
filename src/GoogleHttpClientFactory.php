@@ -36,8 +36,8 @@ class GoogleHttpClientFactory {
       'connect_timeout' => 10,
       'verify' => FALSE,
     ]));
-    return $client;
 
+    return $client;
   }
 
 }

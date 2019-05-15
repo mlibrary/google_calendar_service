@@ -25,8 +25,9 @@ class CalendarEventListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendarEvent */
+    // @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendarEvent.
     $row['calendar'] = $entity->calendar->entity->label();
+
     return $row + parent::buildRow($entity);
   }
 
@@ -38,21 +39,17 @@ class CalendarEventListBuilder extends EntityListBuilder {
 
     if ($entity->access('update') && $entity->hasLinkTemplate('edit-form')) {
       $operations['edit'] = [
-        'title' => $this
-          ->t('Edit'),
+        'title' => $this->t('Edit'),
         'weight' => 10,
-        'url' => $entity
-          ->urlInfo('edit-form'),
+        'url' => $entity->urlInfo('edit-form'),
       ];
     }
 
-    $operations['delete'] = array(
-      'title' => $this
-        ->t('Delete'),
+    $operations['delete'] = [
+      'title' => $this->t('Delete'),
       'weight' => 100,
-      'url' => $entity
-        ->urlInfo('delete-form'),
-    );
+      'url' => $entity->urlInfo('delete-form'),
+    ];
 
     return $operations;
   }

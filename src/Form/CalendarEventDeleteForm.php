@@ -36,7 +36,12 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
    * @param CalendarEditEvents $editEvent
    *   The calendar edit events.
    */
-  public function __construct(EntityManagerInterface $entity_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, CalendarEditEvents $editEvent) {
+  public function __construct(
+    EntityManagerInterface $entity_manager,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
+    TimeInterface $time = NULL,
+    CalendarEditEvents $editEvent) {
+
     parent::__construct($entity_manager, $entity_type_bundle_info, $time);
     $this->editEvent = $editEvent;
   }
@@ -79,7 +84,10 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
   protected function logDeletionMessage() {
     /** @var \Drupal\google_calendar_service\Entity\CalendarEvent $entity */
     $entity = $this->getEntity();
-    $this->logger('content')->notice('The calendar %title has been deleted.', ['%title' => $entity->getName()]);
+    $this->logger('content')->notice(
+      'The calendar %title has been deleted.',
+      ['%title' => $entity->getName()]
+    );
   }
 
   /**
@@ -93,6 +101,7 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
    */
   public function getCalendarName($calendarId) {
     $calendar = Calendar::load($calendarId);
+
     return $calendar->getGoogleCalendarId();
   }
 

@@ -17,20 +17,36 @@ class CalendarAccessControlHandler extends EntityAccessControlHandler {
   /**
    * {@inheritdoc}
    */
-  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
-    /** @var \Drupal\google_calendar_service\Entity\GoogleCalendarInterface $entity */
+  protected function checkAccess(
+    EntityInterface $entity,
+    $operation,
+    AccountInterface $account) {
+
+    /** @var \Drupal\google_calendar_service\Entity\GoogleCalendarInterface */
     switch ($operation) {
       case 'view':
         if (!$entity->isPublished()) {
-          return AccessResult::allowedIfHasPermission($account, 'view unpublished google calendar entities');
+          return AccessResult::allowedIfHasPermission(
+            $account,
+            'view unpublished google calendar entities'
+          );
         }
-        return AccessResult::allowedIfHasPermission($account, 'view published google calendar entities');
+        return AccessResult::allowedIfHasPermission(
+          $account,
+          'view published google calendar entities'
+        );
 
       case 'update':
-        return AccessResult::allowedIfHasPermission($account, 'edit google calendar entities');
+        return AccessResult::allowedIfHasPermission(
+          $account,
+          'edit google calendar entities'
+        );
 
       case 'delete':
-        return AccessResult::allowedIfHasPermission($account, 'delete google calendar entities');
+        return AccessResult::allowedIfHasPermission(
+          $account,
+          'delete google calendar entities'
+        );
     }
 
     // Unknown operation, no opinion.
@@ -40,8 +56,15 @@ class CalendarAccessControlHandler extends EntityAccessControlHandler {
   /**
    * {@inheritdoc}
    */
-  protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    return AccessResult::allowedIfHasPermission($account, 'add google calendar entities');
+  protected function checkCreateAccess(
+    AccountInterface $account,
+    array $context,
+    $entity_bundle = NULL) {
+
+    return AccessResult::allowedIfHasPermission(
+      $account,
+      'add google calendar entities'
+    );
   }
 
 }

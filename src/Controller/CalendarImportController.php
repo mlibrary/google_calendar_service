@@ -48,7 +48,12 @@ class CalendarImportController extends ControllerBase {
    * @param EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(CalendarImport $calendar_import, RequestStack $request_stack, MessengerInterface $messenger, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    CalendarImport $calendar_import,
+    RequestStack $request_stack,
+    MessengerInterface $messenger,
+    EntityTypeManagerInterface $entity_type_manager) {
+
     $this->calendarImport = $calendar_import;
     $this->requestStack = $request_stack;
     $this->messenger = $messenger;
@@ -75,7 +80,9 @@ class CalendarImportController extends ControllerBase {
    */
   public function import($calendar = NULL) {
     if (!empty($calendar)) {
-      $cid = $this->requestStack->getCurrentRequest()->attributes->get('calendar');
+      $cid = $this->requestStack->getCurrentRequest()
+        ->attributes->get('calendar');
+
       $calendar = $this->entityManager
         ->getStorage('gcs_calendar')
         ->load($cid);
@@ -84,7 +91,8 @@ class CalendarImportController extends ControllerBase {
       if ($this->calendarImport->import($calendar)) {
         $this->messenger->addMessage(
           $this->t(
-            'Events for the <strong>@calendar</strong> Calendar have been imported successfully!',
+            'Events for the <strong>@calendar</strong> Calendar have been
+            imported successfully!',
             [
               '@calendar' => $calendar->label(),
             ]
@@ -93,7 +101,9 @@ class CalendarImportController extends ControllerBase {
       }
       else {
         $this->messenger->addMessage(
-          $this->t("Error from Google Calendar API, please check your API settings.")
+          $this->t(
+            'Error from Google Calendar API, please check your API settings.'
+          )
         );
       }
     }

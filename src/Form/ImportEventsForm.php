@@ -46,7 +46,11 @@ class ImportEventsForm extends FormBase {
    * @param MessengerInterface $messenger
    *   The messenger.
    */
-  public function __construct(CalendarImport $google_calendar_service, EntityTypeManagerInterface $entityTypeManager, MessengerInterface $messenger) {
+  public function __construct(
+    CalendarImport $google_calendar_service,
+    EntityTypeManagerInterface $entityTypeManager,
+    MessengerInterface $messenger) {
+
     $this->calendarService = $google_calendar_service;
     $this->entityTypeManager = $entityTypeManager;
     $this->messenger = $messenger;
@@ -76,7 +80,7 @@ class ImportEventsForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['actions']['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Import Events'),
+      '#value' => $this->t('Import Events'),
     ];
 
     return $form;
@@ -102,7 +106,8 @@ class ImportEventsForm extends FormBase {
   public static function handleBatchProcess($calendar, $total, &$context) {
     $name = $calendar->label();
     $context['message'] = "Imported Calendar: $name";
-    \Drupal::service('google_calendar_service.import_events')->import($calendar);
+    \Drupal::service('google_calendar_service.import_events')
+      ->import($calendar);
   }
 
   /**
@@ -122,6 +127,7 @@ class ImportEventsForm extends FormBase {
     else {
       $message = t('Finished with an error.');
     }
+
     \Drupal::messenger()->addMessage($message);
   }
 

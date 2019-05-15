@@ -163,7 +163,9 @@ class Calendar extends ContentEntityBase implements CalendarInterface {
   /**
    * {@inheritdoc}
    */
-  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+  public static function baseFieldDefinitions(
+    EntityTypeInterface $entity_type) {
+
     $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['name'] = BaseFieldDefinition::create('string')
@@ -188,7 +190,10 @@ class Calendar extends ContentEntityBase implements CalendarInterface {
 
     $fields['calendar_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Google Calendar ID'))
-      ->setDescription(t('The ID of the calendar in google.  This can be obtained form the "Integrate Calendar" section of your calendar\'s settings.'))
+      ->setDescription(t(
+        'The ID of the calendar in google.  This can be obtained form the
+        "Integrate Calendar" section of your calendar\'s settings.'
+      ))
       ->setSettings([
         'max_length' => 255,
         'text_processing' => 0,
@@ -224,7 +229,10 @@ class Calendar extends ContentEntityBase implements CalendarInterface {
 
     $fields['start_date'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Start Date'))
-      ->setDescription(t('Event Start Date.  This field is read-only, and should be changed in Google Calendar.'))
+      ->setDescription(t(
+        'Event Start Date.  This field is read-only, and should be changed in
+        Google Calendar.'
+      ))
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'timestamp',
@@ -239,7 +247,10 @@ class Calendar extends ContentEntityBase implements CalendarInterface {
 
     $fields['end_date'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('End Date'))
-      ->setDescription(t('Event End Date.  This field is read-only, and should be changed in Google Calendar.'))
+      ->setDescription(t(
+        'Event End Date.  This field is read-only, and should be changed in
+        Google Calendar.'
+      ))
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'timestamp',
@@ -254,7 +265,9 @@ class Calendar extends ContentEntityBase implements CalendarInterface {
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Publishing status'))
-      ->setDescription(t('A boolean indicating whether the Google Calendar is published.'))
+      ->setDescription(t(
+        'A boolean indicating whether the Google Calendar is published.'
+      ))
       ->setDefaultValue(TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')

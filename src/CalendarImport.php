@@ -59,9 +59,16 @@ class CalendarImport {
    * @param LoggerChannelFactoryInterface $loggerChannelFactory
    *   The logger channel factory.
    */
-  public function __construct(Google_Client $google_client, ConfigFactory $config, EntityTypeManagerInterface $entityTypeManager, LoggerChannelFactoryInterface $loggerChannelFactory) {
+  public function __construct(
+    Google_Client $google_client,
+    ConfigFactory $config,
+    EntityTypeManagerInterface $entityTypeManager,
+    LoggerChannelFactoryInterface $loggerChannelFactory) {
+
     $this->service = new Google_Service_Calendar($google_client);
-    $this->config = $config->getEditable('google_calendar_service.last_imports');
+    $this->config = $config->getEditable(
+      'google_calendar_service.last_imports'
+    );
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $loggerChannelFactory->get('google_calendar_service');
   }
@@ -94,7 +101,10 @@ class CalendarImport {
       }
       else {
         $range['timeMin'] = date(DateTime::RFC3339, $startDate);
-        $range['timeMax'] = date(DateTime::RFC3339, strtotime('+1 day', $endDate));
+        $range['timeMax'] = date(DateTime::RFC3339, strtotime(
+          '+1 day',
+          $endDate
+        ));
       }
 
       // Init dummy page token.
@@ -110,9 +120,11 @@ class CalendarImport {
         $next_page_token = $page->next_page_token;
         $next_sync_token = $page->next_sync_token;
         $items = $page->getItems();
+
         if (count($items) > 0) {
           $this->syncEvents($items, $calendar, $google_calendar->getTimeZone());
         }
+
         $page_count++;
       } while ($next_page_token && $page_count < 10);
 
@@ -120,9 +132,12 @@ class CalendarImport {
       $this->config->set($config_key, $next_sync_token);
       $this->config->save();
 
-      $this->logger->info("Calendar: @calendar imported successfully.", [
-        '@calendar' => $calendar->label(),
-      ]);
+      $this->logger->info(
+        'Calendar: @calendar imported successfully.',
+        [
+          '@calendar' => $calendar->label(),
+        ]
+      );
 
       return TRUE;
     }
@@ -149,10 +164,15 @@ class CalendarImport {
    * @return bool|\Google_Service_Calendar_Events
    *   Return google calendar.
    */
-  private function getPage($cid, $sync_token, $page_token = NULL, $range = FALSE) {
-    $fields = 'description,end,endTimeUnspecified,htmlLink,id,location,'
-                . 'originalStartTime,recurrence,recurringEventId,sequence,'
-                . 'start,summary,attendees,organizer,extendedProperties,status';
+  private function getPage(
+    $cid,
+    $sync_token,
+    $page_token = NULL,
+    $range = FALSE) {
+
+    $fields = 'description,end,endTimeUnspecified,htmlLink,id,location,';
+    $fields .= 'originalStartTime,recurrence,recurringEventId,sequence,';
+    $fields .= 'start,summary,attendees,organizer,extendedProperties,status';
     try {
       $opts = [
         'singleEvents' => TRUE,
@@ -168,6 +188,7 @@ class CalendarImport {
       }
       else {
         $opts['orderBy'] = 'startTime';
+
         if (is_array($range)) {
           $opts['timeMin'] = $range['timeMin'];
           $opts['timeMax'] = $range['timeMax'];
@@ -203,6 +224,7 @@ class CalendarImport {
   private function syncEvents(array $events, $calendar, $timezone) {
     // Get list of event Ids.
     $event_ids = [];
+
     foreach ($events as $event) {
       $event_ids[] = $event['id'];
     }
@@ -231,6 +253,7 @@ class CalendarImport {
         ->condition('id', array_values($existent_event_ids), 'NOT IN')
         ->execute();
     }
+
     // Iterate over events and update Drupal nodes accordingly.
     foreach ($events as $event) {
       // Get the event node.
@@ -256,12 +279,14 @@ class CalendarImport {
           DateTime::ISO8601,
           $event['start']['dateTime']
         );
+
       $end_date = $event['end']['date'] ?
         new DateTime($event['end']['date'], new DateTimeZone($timezone)) :
         DateTime::createFromFormat(
           DateTime::ISO8601,
           $event['end']['dateTime']
         );
+
       // Config fields.
       $fields = [
         'name' => $event['summary'],

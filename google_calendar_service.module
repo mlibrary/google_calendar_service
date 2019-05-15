@@ -13,16 +13,22 @@ use Drupal\views\ViewExecutable;
 /**
  * Implements hook_help().
  */
-function google_calendar_service_help($route_name, RouteMatchInterface $route_match) {
+function google_calendar_service_help(
+  $route_name,
+  RouteMatchInterface $route_match) {
+
   switch ($route_name) {
     // Main module help for the google_calendar_service module.
     case 'help.page.google_calendar_service':
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Provides an integration with Google Calendar and its events.') . '</p>';
+      $output .= '<p>' . t(
+        'Provides an integration with Google Calendar and its events.'
+      ) . '</p>';
       return $output;
 
     default:
+      break;
   }
 }
 
@@ -95,9 +101,15 @@ function google_calendar_service_preprocess_google_calendar(array &$variables) {
 /**
  * Implements hook_views_pre_view().
  */
-function google_calendar_service_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+function google_calendar_service_views_pre_view(
+  ViewExecutable $view,
+  $display_id,
+  array &$args) {
+
   // Store the calendar id.
-  $tempStore = \Drupal::service('user.private_tempstore')->get('google_calendar_service');
+  $tempStore = \Drupal::service('user.private_tempstore')
+    ->get('google_calendar_service');
+
   if (isset($view->args[0])) {
     $tempStore->set('calendarId', $view->args[0]);
   }

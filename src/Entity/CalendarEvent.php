@@ -54,14 +54,18 @@ use Drupal\user\UserInterface;
  *   field_ui_base_route = "google_calendar_event.settings"
  * )
  */
-class CalendarEvent extends ContentEntityBase implements CalendarEventInterface {
+class CalendarEvent extends ContentEntityBase implements
+    CalendarEventInterface {
 
   use EntityChangedTrait;
 
   /**
    * {@inheritdoc}
    */
-  public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
+  public static function preCreate(
+    EntityStorageInterface $storage_controller,
+    array &$values) {
+
     parent::preCreate($storage_controller, $values);
     $values += [
       'user_id' => \Drupal::currentUser()->id(),
@@ -166,7 +170,9 @@ class CalendarEvent extends ContentEntityBase implements CalendarEventInterface 
 
     $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the Google Calendar Event entity.'))
+      ->setDescription(t(
+        'The user ID of author of the Google Calendar Event entity.'
+      ))
       ->setSetting('target_type', 'user')
       ->setSetting('handler', 'default')
       ->setTranslatable(TRUE)
@@ -190,7 +196,10 @@ class CalendarEvent extends ContentEntityBase implements CalendarEventInterface 
 
     $fields['name'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Name'))
-      ->setDescription(t('The name of the event. This field is read-only, and should be changed in Google Calendar.'))
+      ->setDescription(t(
+        'The name of the event. This field is read-only, and should be changed
+        in Google Calendar.'
+      ))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -210,7 +219,10 @@ class CalendarEvent extends ContentEntityBase implements CalendarEventInterface 
 
     $fields['location'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Location'))
-      ->setDescription(t('Event Location.  This field is read-only, and should be changed in Google Calendar.'))
+      ->setDescription(t(
+        'Event Location.  This field is read-only, and should be changed in
+        Google Calendar.'
+      ))
       ->setSettings([
         'max_length' => 255,
         'text_processing' => 0,
@@ -246,7 +258,9 @@ class CalendarEvent extends ContentEntityBase implements CalendarEventInterface 
 
     $fields['description'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Description'))
-      ->setDescription(t('This field is read-only, and should be changed in Google Calendar.'))
+      ->setDescription(t(
+        'This field is read-only, and should be changed in Google Calendar.'
+      ))
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
@@ -266,7 +280,10 @@ class CalendarEvent extends ContentEntityBase implements CalendarEventInterface 
 
     $fields['start_date'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Start Date'))
-      ->setDescription(t('Event Start Date.  This field is read-only, and should be changed in Google Calendar.'))
+      ->setDescription(t(
+        'Event Start Date.  This field is read-only, and should be changed in
+        Google Calendar.'
+      ))
       ->setRequired(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -282,7 +299,10 @@ class CalendarEvent extends ContentEntityBase implements CalendarEventInterface 
 
     $fields['end_date'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('End Date'))
-      ->setDescription(t('Event End Date.  This field is read-only, and should be changed in Google Calendar.'))
+      ->setDescription(t(
+        'Event End Date.  This field is read-only, and should be changed in
+        Google Calendar.'
+      ))
       ->setRequired(TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -298,7 +318,9 @@ class CalendarEvent extends ContentEntityBase implements CalendarEventInterface 
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Publishing status'))
-      ->setDescription(t('A boolean indicating whether the Google Calendar Event is published.'))
+      ->setDescription(t(
+        'A boolean indicating whether the Google Calendar Event is published.'
+      ))
       ->setDefaultValue(TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')

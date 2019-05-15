@@ -16,7 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   cron = {"time" = 60}
  * )
  */
-class CalendarImportProcessor extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+class CalendarImportProcessor extends QueueWorkerBase implements
+    ContainerFactoryPluginInterface {
 
   /**
    * Drupal\google_calendar_service\GoogleCalendarImport definition.
@@ -38,7 +39,12 @@ class CalendarImportProcessor extends QueueWorkerBase implements ContainerFactor
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition) {
+
     return new static(
       $container->get('google_calendar_service.import_events')
     );

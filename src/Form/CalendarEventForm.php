@@ -49,7 +49,13 @@ class CalendarEventForm extends ContentEntityForm {
    * @param MessengerInterface $messenger
    *   The messenger service.
    */
-  public function __construct(EntityManagerInterface $entity_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, CalendarEditEvents $editEvent, MessengerInterface $messenger) {
+  public function __construct(
+    EntityManagerInterface $entity_manager,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
+    TimeInterface $time = NULL,
+    CalendarEditEvents $editEvent,
+    MessengerInterface $messenger) {
+
     parent::__construct($entity_manager, $entity_type_bundle_info, $time);
     $this->editEvent = $editEvent;
     $this->messenger = $messenger;
@@ -72,17 +78,19 @@ class CalendarEventForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendarEvent */
+    // @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendarEvent.
     $form = parent::buildForm($form, $form_state);
     // Get the event id.
     $buildInfo = $form_state->getBuildInfo();
     $entity = $buildInfo['callback_object'];
     $eventId = $entity->getEntity()->getGoogleEventId();
-    $calendarId = $entity->getEntity()->get('calendar')->getValue() ? $entity->getEntity()->get('calendar')->getValue()[0]['target_id'] : NULL;
+    $calendarId = $entity->getEntity()->get('calendar')->getValue() ?
+      $entity->getEntity()->get('calendar')->getValue()[0]['target_id'] :
+      NULL;
     $form_state->set('event_id', $eventId);
     $form_state->set('calendar_id', $calendarId);
-
     $form['start_date']['#required'] = TRUE;
+
     return $form;
   }
 
@@ -93,36 +101,45 @@ class CalendarEventForm extends ContentEntityForm {
     $entity = &$this->entity;
 
     $status = parent::save($form, $form_state);
-    $dataValues = $form_state->getValues();
+    $values = $form_state->getValues();
 
-    $data['name'] = $dataValues['name'] ? $dataValues['name'][0]['value'] : NULL;
-    $data['location'] = $dataValues['location'] ? $dataValues['location'][0]['value'] : NULL;
-    $data['description'] = $dataValues['description'] ? $dataValues['description'][0]['value'] : NULL;
+    $data['name'] = $values['name'] ? $values['name'][0]['value'] : NULL;
+    $data['location'] = $values['location'] ?
+      $values['location'][0]['value'] :
+      NULL;
+    $data['description'] = $values['description'] ?
+      $values['description'][0]['value'] :
+      NULL;
 
-    $startDate = $dataValues['start_date'][0]['value'];
+    $startDate = $values['start_date'][0]['value'];
     if (!empty($startDate)) {
       $data['startDate'] = $startDate->format('Y-m-d H:i');
     }
 
-    $endDate = $dataValues['end_date'][0]['value'];
+    $endDate = $values['end_date'][0]['value'];
     if (!empty($endDate)) {
       $data['endDate'] = $endDate->format('Y-m-d H:i');
     }
 
     // Get calendar id.
-    $tempStore = \Drupal::service('user.private_tempstore')->get('google_calendar_service');
+    $tempStore = \Drupal::service('user.private_tempstore')
+      ->get('google_calendar_service');
     $calendarId = $tempStore->get('calendarId');
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger->addMessage($this->t('Created the %label Google Calendar Event.', [
-          '%label' => $entity->label(),
-        ]));
+        $this->messenger->addMessage($this->t(
+          'Created the %label Google Calendar Event.',
+          [
+            '%label' => $entity->label(),
+          ]
+        ));
 
         if (!empty($calendarId)) {
           $calendar = $this->getCalendarId($calendarId);
           // Get timezone.
-          $timeZone = $this->editEvent->service->calendars->get($calendar)->getTimeZone();
+          $timeZone = $this->editEvent->service->calendars->get($calendar)
+            ->getTimeZone();
 
           if ($entity->id()) {
             $eventId = $this->generateRandomString();
@@ -130,13 +147,24 @@ class CalendarEventForm extends ContentEntityForm {
 
             $entity->set('calendar', $calendarId);
             $entity->save();
-            $this->editEvent->addCalendarEvent($calendar, $data['name'], $data['location'], $data['description'], $data['startDate'], $data['endDate'], $timeZone);
+            $this->editEvent->addCalendarEvent(
+              $calendar,
+              $data['name'],
+              $data['location'],
+              $data['description'],
+              $data['startDate'],
+              $data['endDate'],
+              $timeZone
+            );
           }
           else {
             // In the unlikely case something went wrong on save, the node
             // will be rebuilt and node form redisplayed the same way as
             // in preview.
-            $this->messenger->addMessage($this->t('The post could not be saved.'), 'error');
+            $this->messenger->addMessage(
+              $this->t('The post could not be saved.'),
+              'error'
+            );
             $form_state->setRebuild();
           }
         }
@@ -148,10 +176,16 @@ class CalendarEventForm extends ContentEntityForm {
         $calendarId = $this->getCalendarId($form_state->get('calendar_id'));
 
         // Get timezone.
-        $timeZone = $this->editEvent->service->calendars->get($calendarId)->getTimeZone();
+        $timeZone = $this->editEvent->service->calendars->get($calendarId)
+          ->getTimeZone();
 
         try {
-          $this->editEvent->patchCalendar($calendarId, $eventId, $data, $timeZone);
+          $this->editEvent->patchCalendar(
+            $calendarId,
+            $eventId,
+            $data,
+            $timeZone
+          );
         }
         catch (Google_Service_Exception $e) {
           // Catch non-authorized exception.
@@ -159,12 +193,18 @@ class CalendarEventForm extends ContentEntityForm {
             return FALSE;
           }
         }
-        $this->messenger->addMessage($this->t('Saved the %label Google Calendar Event.', [
-          '%label' => $entity->label(),
-        ]));
+        $this->messenger->addMessage($this->t(
+          'Saved the %label Google Calendar Event.',
+          [
+            '%label' => $entity->label(),
+          ]
+        ));
     }
 
-    $url = Url::fromRoute('view.fsusd_gcs_calendar_events.calendar_list', ['arg_0' => $calendarId]);
+    $url = Url::fromRoute(
+      'view.gcs_calendar_events.calendar_list',
+      ['arg_0' => $calendarId]
+    );
     $form_state->setRedirectUrl($url);
   }
 
@@ -179,6 +219,7 @@ class CalendarEventForm extends ContentEntityForm {
    */
   public function getCalendarId($calendarId) {
     $calendar = Calendar::load($calendarId);
+
     return $calendar->getGoogleCalendarId();
   }
 
@@ -195,9 +236,11 @@ class CalendarEventForm extends ContentEntityForm {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
     $charactersLength = strlen($characters);
     $randomString = '';
+
     for ($i = 0; $i < $length; $i++) {
       $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
+
     return $randomString;
   }
 

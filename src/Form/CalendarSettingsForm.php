@@ -45,7 +45,13 @@ class CalendarSettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityFieldManager $fieldManager, EntityTypeManagerInterface $entity_type_manager, MessengerInterface $messenger, FileSystemInterface $file_system) {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    EntityFieldManager $fieldManager,
+    EntityTypeManagerInterface $entity_type_manager,
+    MessengerInterface $messenger,
+    FileSystemInterface $file_system) {
+
     parent::__construct($config_factory);
     $this->fieldManager = $fieldManager;
     $this->entityManager = $entity_type_manager;
@@ -101,20 +107,29 @@ class CalendarSettingsForm extends ConfigFormBase {
     $form['setup_steps_info']['setup_steps'] = [
       '#markup' => t(
       '<ol>
-        <li>Go to <a href="https://console.developers.google.com/projectcreate" target="_blank">Google add project page</a> and create your project.</li>
-        <li>Navigate to Google Api\'s list and enable "Google Calendar API".</li>
-        <li>Create credentials for your APi, using the hint from the enabled Google Calendar API page or <a href="https://console.developers.google.com/apis/credentials" target="_blank">Add them here</a></li>
-        <li>Create "OAuth client ID".</li>
-        <li>Download Your Secret Client JSON and upload it on the below form.</li>
+      <li>
+      Go to <a href="https://console.developers.google.com/projectcreate"
+      target="_blank">Google add project page</a> and create your project.
+      </li>
+      <li>Navigate to Google Api\'s list and enable "Google Calendar API".</li>
+      <li>Create credentials for your APi, using the hint from the enabled
+      Google Calendar API page or
+      <a href="https://console.developers.google.com/apis/credentials"
+      target="_blank">Add them here</a>
+      </li>
+      <li>Create "OAuth client ID".</li>
+      <li>Download Your Secret Client JSON and upload it on the below form.</li>
       </ol>'
       ),
-      '#allowed_tags' => ['div', 'ul', 'li'],
+      '#allowed_tags' => ['div', 'ul', 'ol', 'li'],
     ];
 
     if ($file_uri = $config->get('secret_file_uri')) {
       $file = $file_storage->loadByProperties(['uri' => $file_uri]);
       $file_real_path = $this->fileSystem->realpath($file_uri);
-      $file_url = Url::fromUserInput(file_url_transform_relative(file_create_url($file_uri)));
+      $file_url = Url::fromUserInput(
+        file_url_transform_relative(file_create_url($file_uri))
+      );
 
       $form['fieldset_info'] = [
         '#type' => 'fieldset',
@@ -154,8 +169,8 @@ class CalendarSettingsForm extends ConfigFormBase {
     }
 
     $form['google_user_email'] = [
-      '#type'          => 'textfield',
-      '#title'         => 'Google User Email',
+      '#type' => 'textfield',
+      '#title' => 'Google User Email',
       '#default_value' => $config->get('google_user_email'),
     ];
 
@@ -211,7 +226,10 @@ class CalendarSettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function removeSecretClientFile(array &$form, FormStateInterface $form_state) {
+  public function removeSecretClientFile(
+    rray &$form,
+    FormStateInterface $form_state) {
+
     $config = $this->config('google_calendar_service.default');
     $file_storage = $this->entityManager->getStorage('file');
 

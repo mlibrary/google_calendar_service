@@ -20,7 +20,11 @@ class CalendarDeleteForm extends ContentEntityDeleteForm {
     $entityName = $entity->getName();
 
     // Delete events of the calendar.
-    $events = \Drupal::entityQuery('gcs_calendar_event')->condition('calendar', $entity->id())->execute();
+    $events = \Drupal::entityQuery('gcs_calendar_event')->condition(
+      'calendar',
+      $entity->id()
+    )->execute();
+
     if (!empty($events)) {
       entity_delete_multiple('gcs_calendar_event', $events);
     }
@@ -36,7 +40,10 @@ class CalendarDeleteForm extends ContentEntityDeleteForm {
   protected function logDeletionMessage() {
     /** @var \Drupal\google_calendar_service\Entity\Calendar $entity */
     $entity = $this->getEntity();
-    $this->logger('content')->notice('The calendar %title has been deleted.', ['%title' => $entity->getName()]);
+    $this->logger('content')->notice(
+      'The calendar %title has been deleted.',
+      ['%title' => $entity->getName()]
+    );
   }
 
 }

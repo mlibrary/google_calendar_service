@@ -46,7 +46,13 @@ class CalendarForm extends ContentEntityForm {
    * @param CalendarImport $calendar_import
    *   The calendar import service.
    */
-  public function __construct(EntityManagerInterface $entity_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL, TimeInterface $time = NULL, MessengerInterface $messenger, CalendarImport $calendar_import) {
+  public function __construct(
+    EntityManagerInterface $entity_manager,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL,
+    TimeInterface $time = NULL,
+    MessengerInterface $messenger,
+    CalendarImport $calendar_import) {
+
     parent::__construct($entity_manager, $entity_type_bundle_info, $time);
     $this->messenger = $messenger;
     $this->calendarImport = $calendar_import;
@@ -97,17 +103,24 @@ class CalendarForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger->addMessage($this->t('Created the %label Google Calendar.', [
-          '%label' => $entity->label(),
-        ]));
+        $this->messenger->addMessage($this->t(
+          'Created the %label Google Calendar.',
+          [
+            '%label' => $entity->label(),
+          ]
+        ));
 
         break;
 
       default:
-        $this->messenger->addMessage($this->t('Saved the %label Google Calendar.', [
-          '%label' => $entity->label(),
-        ]));
+        $this->messenger->addMessage($this->t(
+          'Saved the %label Google Calendar.',
+          [
+            '%label' => $entity->label(),
+          ]
+        ));
     }
+
     $form_state->setRedirect('entity.gcs_calendar.collection');
   }
 
