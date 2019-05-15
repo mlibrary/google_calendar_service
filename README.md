@@ -23,7 +23,7 @@ INSTALLATION
   "/admin/config/google-calendar-service/settings" and configure the settings.
 
 CONFIGURATION
-  * Navigate to /admin/config/google-calendar-service/settings"
+  * Navigate to "/admin/config/google-calendar-service/settings"
   * Go to https://console.developers.google.com/projectcreate and create your
   project.
   * Navigate to Google Api's list and enable "Google Calendar API".
