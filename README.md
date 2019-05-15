@@ -20,10 +20,10 @@ INSTALLATION
   * Run "composer require google/apiclient" before installation.
   * The module can be installed like other modules.
   * Once the module has been installed, navigate to
-  "admin/config/calendar/settings" and configure the settings.
-
+  "/admin/config/google-calendar-service/settings" and configure the settings.
 
 CONFIGURATION
+  * Navigate to /admin/config/google-calendar-service/settings"
   * Go to https://console.developers.google.com/projectcreate and create your
   project.
   * Navigate to Google Api's list and enable "Google Calendar API".

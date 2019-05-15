@@ -7,7 +7,7 @@ google_calendar_service.import_controller:
     _role: 'administrator'
 
 google_calendar_service.settings:
-  path: '/admin/config/calendar/settings'
+  path: '/admin/config/google-calendar-service/settings'
   defaults:
     _form:  '\Drupal\google_calendar_service\Form\CalendarSettingsForm'
     _title: 'Google Calendar Services | Settings'
