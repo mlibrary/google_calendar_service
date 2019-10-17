@@ -127,6 +127,7 @@ class CalendarSettingsForm extends ConfigFormBase {
       </li>
       <li>Create "OAuth client ID".</li>
       <li>Download Your Secret Client JSON and upload it on the below form.</li>
+      <li>Add the Google Email used Google Calendar API from the above steps.</li>
       </ol>'
       ),
       '#allowed_tags' => ['div', 'ul', 'ol', 'li'],
@@ -176,7 +177,7 @@ class CalendarSettingsForm extends ConfigFormBase {
 
     $form['google_user_email'] = [
       '#type' => 'textfield',
-      '#title' => 'Google User Email',
+      '#title' => $this->t('Google User Email'),
       '#default_value' => $config->get('google_user_email'),
     ];
 

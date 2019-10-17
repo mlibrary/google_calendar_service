@@ -32,7 +32,7 @@ CONFIGURATION
   * Create "OAuth client ID".
   * Download Your Secret Client JSON and upload it on the below form.
   * Upload the secret client file.
-  * Write the google user email.
+  * Add the google email used Google Calendar API from the above steps.
   * Save configuration.
 
   Setting up the Google Calendar:
