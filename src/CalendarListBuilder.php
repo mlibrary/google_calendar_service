@@ -45,7 +45,7 @@ class CalendarListBuilder extends EntityListBuilder {
       $operations['edit'] = [
         'title' => $this->t('Edit'),
         'weight' => 10,
-        'url' => $entity->urlInfo('edit-form'),
+        'url' => $entity->toUrl('edit-form')->toString(),
       ];
     }
     if ($entity->access('delete') &&
@@ -54,7 +54,7 @@ class CalendarListBuilder extends EntityListBuilder {
       $operations['delete'] = [
         'title' => $this->t('Delete'),
         'weight' => 100,
-        'url' => $entity->urlInfo('delete-form'),
+        'url' => $entity->toUrl('delete-form')->toString(),
       ];
     }
 

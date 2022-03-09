@@ -1,6 +1,6 @@
 name: Google Calendar Service
 type: module
 description: Provides an integration with Google Calendar and related services.
-core: 8.x
+core_version_requirement: ^8.8 || ^9
 package: Calendars
 configure: google_calendar_service.settings

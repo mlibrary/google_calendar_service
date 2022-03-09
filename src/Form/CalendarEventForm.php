@@ -4,7 +4,7 @@ namespace Drupal\google_calendar_service\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityForm;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -13,7 +13,7 @@ use Drupal\google_calendar_service\CalendarEditEvents;
 use Drupal\google_calendar_service\Entity\Calendar;
 use Google_Service_Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\user\PrivateTempStoreFactory;
+use Drupal\Core\TempStore\PrivateTempStoreFactory;
 
 /**
  * Form controller for Google Calendar Event edit forms.
@@ -39,14 +39,14 @@ class CalendarEventForm extends ContentEntityForm {
   /**
    * The Private tempstore.
    *
-   * @var \Drupal\user\PrivateTempStoreFactory
+   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
    */
   protected $tempstore;
 
   /**
    * CalendarEventForm constructor.
    *
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
    *   The entity type bundle info.
@@ -56,18 +56,18 @@ class CalendarEventForm extends ContentEntityForm {
    *   The calendar edit events service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
-   * @param \Drupal\user\PrivateTempStoreFactory $tempstore
-   *   The messenger service.
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempstore
+   *   The private store factory.
    */
   public function __construct(
-    EntityManagerInterface $entity_manager,
+    EntityTypeManagerInterface $entity_type_manager,
     EntityTypeBundleInfoInterface $bundle_info = NULL,
     TimeInterface $time = NULL,
     CalendarEditEvents $editEvent,
     MessengerInterface $messenger,
     PrivateTempStoreFactory $tempstore) {
 
-    parent::__construct($entity_manager, $bundle_info, $time);
+    parent::__construct($entity_type_manager, $bundle_info, $time);
     $this->editEvent = $editEvent;
     $this->messenger = $messenger;
     $this->tempstore = $tempstore;
@@ -78,12 +78,12 @@ class CalendarEventForm extends ContentEntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),
       $container->get('google_calendar_service.edit_events'),
       $container->get('messenger'),
-      $container->get('user.private_tempstore')
+      $container->get('tempstore.private')
     );
   }
 

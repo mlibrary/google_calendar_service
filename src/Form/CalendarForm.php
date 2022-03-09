@@ -4,7 +4,7 @@ namespace Drupal\google_calendar_service\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityForm;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -35,8 +35,8 @@ class CalendarForm extends ContentEntityForm {
   /**
    * CalendarForm constructor.
    *
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
-   *   The entity manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
    *   The entity type bundle info.
    * @param \Drupal\Component\Datetime\TimeInterface $time
@@ -47,13 +47,13 @@ class CalendarForm extends ContentEntityForm {
    *   The calendar import service.
    */
   public function __construct(
-    EntityManagerInterface $entity_manager,
+    EntityTypeManagerInterface $entity_type_manager,
     EntityTypeBundleInfoInterface $bundle_info = NULL,
     TimeInterface $time = NULL,
     MessengerInterface $messenger,
     CalendarImport $calendar_import) {
 
-    parent::__construct($entity_manager, $bundle_info, $time);
+    parent::__construct($entity_type_manager, $bundle_info, $time);
     $this->messenger = $messenger;
     $this->calendarImport = $calendar_import;
   }
@@ -63,7 +63,7 @@ class CalendarForm extends ContentEntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),
       $container->get('messenger'),

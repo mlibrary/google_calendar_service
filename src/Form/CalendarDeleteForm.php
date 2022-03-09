@@ -26,7 +26,9 @@ class CalendarDeleteForm extends ContentEntityDeleteForm {
     )->execute();
 
     if (!empty($events)) {
-      entity_delete_multiple('gcs_calendar_event', $events);
+      $storage_handler = $this->entityTypeManager->getStorage('gcs_calendar_event');
+      $entities = $storage_handler->loadMultiple($events);
+      $storage_handler->delete($entities);
     }
 
     return $this->t('The calendar %title has been deleted.', [

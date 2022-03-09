@@ -11,6 +11,7 @@ use Google_Service_Calendar;
 use Google_Service_Exception;
 use DateTime;
 use DateTimeZone;
+use Drupal\Core\Database\Connection;
 
 /**
  * Class CalendarImport.
@@ -48,6 +49,13 @@ class CalendarImport {
   protected $entityTypeManager;
 
   /**
+   * Active database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * CalendarImport constructor.
    *
    * @param \Google_Client $google_client
@@ -58,12 +66,15 @@ class CalendarImport {
    *   The entity type manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection to be used.
    */
   public function __construct(
     Google_Client $google_client,
     ConfigFactory $config,
     EntityTypeManagerInterface $entityTypeManager,
-    LoggerChannelFactoryInterface $logger) {
+    LoggerChannelFactoryInterface $logger,
+    Connection $database) {
 
     $this->service = new Google_Service_Calendar($google_client);
     $this->config = $config->getEditable(
@@ -71,6 +82,7 @@ class CalendarImport {
     );
     $this->entityTypeManager = $entityTypeManager;
     $this->logger = $logger->get('google_calendar_service');
+    $this->database = $database;
   }
 
   /**
@@ -249,7 +261,7 @@ class CalendarImport {
 
     // Delete events if are not in the $events.
     if (!empty($existent_event_ids)) {
-      db_delete('gcs_calendar_event')
+      $this->database->delete('gcs_calendar_event')
         ->condition('id', array_values($existent_event_ids), 'NOT IN')
         ->execute();
     }

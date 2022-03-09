@@ -4,7 +4,7 @@ namespace Drupal\google_calendar_service\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityDeleteForm;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\google_calendar_service\CalendarEditEvents;
 use Drupal\google_calendar_service\Entity\Calendar;
@@ -27,7 +27,7 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
   /**
    * CalendarEventDeleteForm constructor.
    *
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
    *   The entity type bundle info.
@@ -37,12 +37,12 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
    *   The calendar edit events.
    */
   public function __construct(
-    EntityManagerInterface $entity_manager,
+    EntityTypeManagerInterface $entity_type_manager,
     EntityTypeBundleInfoInterface $bundle_info = NULL,
     TimeInterface $time = NULL,
     CalendarEditEvents $editEvent) {
 
-    parent::__construct($entity_manager, $bundle_info, $time);
+    parent::__construct($entity_type_manager, $bundle_info, $time);
     $this->editEvent = $editEvent;
   }
 
@@ -51,7 +51,7 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager'),
+      $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),
       $container->get('google_calendar_service.edit_events')
