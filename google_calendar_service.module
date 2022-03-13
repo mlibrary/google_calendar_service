@@ -101,7 +101,7 @@ function google_calendar_service_views_pre_view(
   array &$args) {
 
   // Store the calendar id.
-  $tempStore = \Drupal::service('user.private_tempstore')
+  $tempStore = \Drupal::service('tempstore.private')
     ->get('google_calendar_service');
 
   if (isset($view->args[0])) {
