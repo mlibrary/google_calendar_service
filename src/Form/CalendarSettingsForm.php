@@ -135,7 +135,7 @@ class CalendarSettingsForm extends ConfigFormBase {
 
     if ($file_uri = $config->get('secret_file_uri')) {
       $file_url = Url::fromUserInput(
-        file_url_transform_relative(file_create_url($file_uri))
+        \Drupal::service('file_url_generator')->generateString($file_uri)
       );
 
       $form['fieldset_info'] = [
