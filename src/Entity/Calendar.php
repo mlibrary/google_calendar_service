@@ -50,7 +50,6 @@ use Drupal\user\UserInterface;
  *     "delete-form" = "/admin/calendar/{gcs_calendar}/delete",
  *     "collection" = "/admin/calendar",
  *   },
- *   field_ui_base_route = "gcs_calendar.settings"
  * )
  */
 class Calendar extends ContentEntityBase implements CalendarInterface {

@@ -5,7 +5,6 @@ google_calendar_service.import_controller:
     _title: 'Import Calendar Events'
   requirements:
     _role: 'administrator'
-
 google_calendar_service.settings:
   path: '/admin/config/google-calendar-service/settings'
   defaults:
@@ -13,7 +12,6 @@ google_calendar_service.settings:
     _title: 'Google Calendar Services | Settings'
   requirements:
     _permission: 'administer calendars and events'
-
 google_calendar_service.gcs_calendar_event_add:
   path: '/admin/calendar/event/add'
   defaults:
@@ -22,7 +20,6 @@ google_calendar_service.gcs_calendar_event_add:
     _title: 'Add calendar event'
   requirements:
     _entity_create_access: 'gcs_calendar_event'
-
 entity.gcs_calendar_event.delete_form:
   path: '/admin/calendar/event/{gcs_calendar_event}/delete'
   defaults:

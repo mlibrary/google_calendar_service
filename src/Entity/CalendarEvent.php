@@ -51,7 +51,6 @@ use Drupal\user\UserInterface;
  *     "delete-form" = "/admin/calendar/event/{gcs_calendar_event}/delete",
  *     "collection" = "/admin/calendar/events",
  *   },
- *   field_ui_base_route = "google_calendar_event.settings"
  * )
  */
 class CalendarEvent extends ContentEntityBase implements
