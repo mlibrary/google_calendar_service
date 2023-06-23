@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\google_calendar_service\CalendarImport;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Form controller for Calendar edit forms.
@@ -35,6 +36,8 @@ class CalendarForm extends ContentEntityForm {
   /**
    * CalendarForm constructor.
    *
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
@@ -47,15 +50,17 @@ class CalendarForm extends ContentEntityForm {
    *   The calendar import service.
    */
   public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
+    EntityRepositoryInterface $entity_repository,
     EntityTypeBundleInfoInterface $bundle_info = NULL,
     TimeInterface $time = NULL,
     MessengerInterface $messenger,
-    CalendarImport $calendar_import) {
+    CalendarImport $calendar_import,
+    EntityTypeManagerInterface $entity_type_manager) {
 
-    parent::__construct($entity_type_manager, $bundle_info, $time);
+    parent::__construct($entity_repository, $bundle_info, $time);
     $this->messenger = $messenger;
     $this->calendarImport = $calendar_import;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -63,11 +68,12 @@ class CalendarForm extends ContentEntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager'),
+      $container->get('entity.repository'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),
       $container->get('messenger'),
-      $container->get('google_calendar_service.import_events')
+      $container->get('google_calendar_service.import_events'),
+      $container->get('entity_type.manager')
     );
   }
 

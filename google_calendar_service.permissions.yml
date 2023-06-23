@@ -1,22 +1,31 @@
-add calendars and events:
-  title: 'Create new Google Calendars and events.'
+add calendars:
+  title: 'Create new Google Calendars.'
+
+add events:
+  title: 'Create new Google Calendar events.'
 
 administer calendars and events:
   title: 'Administer Google Calendars'
   description: 'Allow to access the administration form to configure Google Calendar.'
   restrict access: true
 
-delete calendars and events:
+delete calendars:
   title: 'Delete Google Calendars.'
 
-edit calendars and events:
-  title: 'Edit Google Calendars and his events.'
+delete events:
+  title: 'Delete Google Calendar events.'
 
-view published calendars and events:
-  title: 'View published Google Calendars and his events.'
+edit calendars:
+  title: 'Edit Google Calendars.'
 
-view unpublished calendars and events:
-  title: 'View unpublished Google Calendars.'
+edit events:
+  title: 'Edit Google Calendar events.'
+
+view calendars:
+  title: 'View Google Calendars.'
+
+view events:
+  title: 'View Google Calendar events.'
 
 import calendar events:
-  title: 'Import events from google Calendar.'
+  title: 'Import events from Google Calendar.'

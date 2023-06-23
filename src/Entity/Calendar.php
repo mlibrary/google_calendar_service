@@ -45,10 +45,10 @@ use Drupal\user\UserInterface;
  *   },
  *   links = {
  *     "canonical" = "/calendar/{gcs_calendar}",
- *     "add-form" = "/admin/calendar/add",
- *     "edit-form" = "/admin/calendar/{gcs_calendar}/edit",
- *     "delete-form" = "/admin/calendar/{gcs_calendar}/delete",
- *     "collection" = "/admin/calendar",
+ *     "add-form" = "/calendar/add",
+ *     "edit-form" = "/calendar/{gcs_calendar}/edit",
+ *     "delete-form" = "/calendar/{gcs_calendar}/delete",
+ *     "collection" = "/calendar",
  *   },
  * )
  */
@@ -212,6 +212,22 @@ class Calendar extends ContentEntityBase implements CalendarInterface {
 
     $fields['set_all'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Get all events'))
+      ->setSettings([
+        'on_label' => t('Yes'),
+        'off_label' => t('No'),
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+        'weight' => 20,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDefaultValue(TRUE);
+
+    $fields['validate_date'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Validate date and time is available.'))
       ->setSettings([
         'on_label' => t('Yes'),
         'off_label' => t('No'),

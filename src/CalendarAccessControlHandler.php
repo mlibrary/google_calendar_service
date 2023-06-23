@@ -25,27 +25,21 @@ class CalendarAccessControlHandler extends EntityAccessControlHandler {
     // @var \Drupal\google_calendar_service\Entity\GoogleCalendarInterface.
     switch ($operation) {
       case 'view':
-        if (!$entity->isPublished()) {
-          return AccessResult::allowedIfHasPermission(
-            $account,
-            'view unpublished google calendar entities'
-          );
-        }
         return AccessResult::allowedIfHasPermission(
           $account,
-          'view published google calendar entities'
+          'view calendars'
         );
 
       case 'update':
         return AccessResult::allowedIfHasPermission(
           $account,
-          'edit google calendar entities'
+          'edit calendars'
         );
 
       case 'delete':
         return AccessResult::allowedIfHasPermission(
           $account,
-          'delete google calendar entities'
+          'delete calendars'
         );
     }
 
@@ -63,7 +57,7 @@ class CalendarAccessControlHandler extends EntityAccessControlHandler {
 
     return AccessResult::allowedIfHasPermission(
       $account,
-      'add google calendar entities'
+      'add calendars'
     );
   }
 

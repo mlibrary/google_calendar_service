@@ -9,6 +9,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Exception;
+use Google_Service_Calendar_EventAttendee;
 
 /**
  * Class CalendarImport.
@@ -85,7 +86,6 @@ class CalendarEditEvents {
    */
   public function patchCalendar($calendarId, $eventId, array $data, $timezone) {
     $event = $this->service->events->get($calendarId, $eventId);
-
     if (isset($data['name'])) {
       $event->setSummary($data['name']);
     }
@@ -112,8 +112,31 @@ class CalendarEditEvents {
       $event->setEnd($end);
     }
 
+$attendees = $event->getAttendees();
+dpm($attendees);
+$attendeeNew = new Google_Service_Calendar_EventAttendee();
+$attendeeNew->setEmail('eliotwsc@umich.edu');
+$attendeeNew->setDisplayName('grr');
+//$attendeeNew->setResponseStatus('accepted');
+//$attendeeNew->setOrganizer(true);
+//dpm($attendeeNew);
+$attendees = $attendees ?? [];
+array_push($attendees,$attendeeNew);
+//$event->setAttendees($attendees);
+$attendees = $event->getAttendees();
+dpm($attendees);
+
     // Update calendar event service.
-    $this->service->events->update($calendarId, $eventId, $event);
+    try {
+      return $this->service->events->update($calendarId, $eventId, $event);
+    }
+    catch (Google_Service_Exception $e) {
+exit(print_r($e));
+      // Catch non-authorized exception.
+      if ($e->getCode() == 401) {
+        return FALSE;
+      }
+    }
   }
 
   /**
@@ -175,6 +198,18 @@ class CalendarEditEvents {
       $event->setDescription($eventDescription);
     }
 
+//$attendeeNew = ['email' => 'eliotwsc@umich.edu',];
+$attendeeNew = new Google_Service_Calendar_EventAttendee();
+$attendeeNew->setEmail('eliotwsc@umich.edu');
+//$attendeeNew->setResponseStatus('accepted');
+//$attendeeNew->setOrganizer(true);
+//dpm($attendeeNew);
+$attendees = $event->getAttendees();
+dpm($attendees);
+//$attendees = $attendees ?? [];
+//array_push($attendees,$attendeeNew);
+$event->setAttendees($attendeeNew);
+
     try {
       return $this->service->events->insert($calendarId, $event);
     }
@@ -200,6 +235,51 @@ class CalendarEditEvents {
   public function deleteGoogleCalendar($calendarId, $eventId) {
     try {
       $this->service->events->delete($calendarId, $eventId);
+    }
+    catch (Google_Service_Exception $e) {
+      // Catch non-authorized exception.
+      if ($e->getCode() == 401) {
+        return FALSE;
+      }
+    }
+  }
+
+  /**
+   * Verify time available for google calendar event.
+   *
+   * @param string $calendarId
+   *   The calendar id.
+   * @param string $startTime
+   *   The event start time.
+   * @param string $endTime
+   *   The event end time.
+   *
+   * @return bool
+   *   Return deletion of calendar.
+   */
+  public function verifyTimeGoogleCalendar($calendarId, $startTime, $endTime, $eventId = NULL) {
+    try {
+      $optParams = [
+        'maxResults' => 2,
+        'singleEvents' => TRUE,
+        'showHiddenInvitations' => TRUE,
+        'timeMin' => $startTime,
+        'timeMax' => $endTime,
+      ];
+      $results = $this->service->events->listEvents($calendarId, $optParams);
+      if ($eventId) {
+        foreach ($results->items as $key => $event) {
+          if ($eventId == $event->id) {
+            unset($results->items[$key]);
+          }
+        }
+      }
+      if (empty($results->items)) {
+        return TRUE;
+      }
+      else {
+        return FALSE;
+      }
     }
     catch (Google_Service_Exception $e) {
       // Catch non-authorized exception.

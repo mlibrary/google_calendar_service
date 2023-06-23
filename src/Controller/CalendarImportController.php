@@ -79,6 +79,11 @@ class CalendarImportController extends ControllerBase {
    *   Return Hello string.
    */
   public function import($calendar = NULL) {
+    if ($calendar == 'all') {
+      $this->importAll();
+
+      return $this->redirect('view.gcs_calendar_events.calendar_all_list');
+    }
     if (!empty($calendar)) {
       $cid = $this->requestStack->getCurrentRequest()
         ->attributes->get('calendar');
@@ -109,6 +114,36 @@ class CalendarImportController extends ControllerBase {
     }
 
     return $this->redirect('entity.gcs_calendar.collection');
+  }
+
+  /**
+   * Import all calendars.
+   *
+   */
+  public function importAll() {
+    $calendars = $this->entityManager->getStorage('gcs_calendar')->loadMultiple();
+    foreach ($calendars as $calendar) {
+      if ($calendar instanceof CalendarInterface) {
+        if ($this->calendarImport->import($calendar)) {
+          $this->messenger->addMessage(
+            $this->t(
+              'Events for the <strong>@calendar</strong> Calendar have been
+              imported successfully!',
+              [
+                '@calendar' => $calendar->label(),
+              ]
+            )
+          );
+        }
+        else {
+          $this->messenger->addMessage(
+            $this->t(
+              'Error from Google Calendar API, please check your API settings.'
+            )
+          );
+        }
+      }
+    }
   }
 
 }

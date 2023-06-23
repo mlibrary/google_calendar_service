@@ -9,6 +9,89 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Render\Element;
 use Drupal\google_calendar_service\Entity\Calendar;
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function google_calendar_service_inline_entity_form_entity_form_alter(array &$entity_form, &$form_state) {
+  if ($entity_form['#entity_type'] == 'gcs_calendar_event') {
+    $calendar_id = $form_state->getValue('field_calendar')[0];
+    $entity_form['#entity']->setCalendarId($calendar_id);
+    $entity_form['#element_validate'][] = '_validate_time_save_google_event';
+    $entity_form['#ief_element_submit'][] = '_save_google_event_form_submit';
+    $submit_handlers = $form_state->getSubmitHandlers();
+    $submit_handlers[] = '_save_google_event_form_submit';
+    $form_state->setSubmitHandlers($submit_handlers);
+  }
+}
+
+use Drupal\Core\Datetime\DrupalDateTime;
+
+function _save_google_event_form_submit(array &$form, $form_state) {
+  $start_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['start_date'][0]['value'];
+  $end_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['end_date'][0]['value'];
+  $name = $form_state->getValue('field_session_details')[0]['inline_entity_form']['name'][0]['value'];
+  $location = $form_state->getValue('field_session_details')[0]['inline_entity_form']['location'][0]['value'];
+  $description = $form_state->getValue('field_session_details')[0]['inline_entity_form']['description'][0]['value'];
+  $calendar_id = $form_state->getValue('field_calendar')[0]['target_id'];
+  if ($start_date instanceof DrupalDateTime && $end_date instanceof DrupalDateTime && is_numeric($calendar_id)) {
+    $editEventService = \Drupal::service('google_calendar_service.edit_events');
+    $start_date = date('c', $start_date->getTimestamp());
+    $end_date = date('c', $end_date->getTimestamp());
+    $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($calendar_id);
+    $calendarId = $calendar->get('calendar_id')->value;
+    $event_id = NULL;
+    if ($form['#entity']->hasField('event_id')) {
+      $event_id = $form['#entity']->get('event_id')->value;
+    }
+    $node = $form_state->getFormObject()->getEntity();
+    $old_calendar_id = $node->get('field_calendar')->target_id;
+    if ($event_id && $old_calendar_id && $old_calendar_id != $calendar_id) {
+      $old_calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($old_calendar_id);
+      $old_calendarId = $old_calendar->get('calendar_id')->value;
+      $editEventService->deleteGoogleCalendar($old_calendarId, $event_id);
+      $event_id = NULL;
+      $form['#entity']->get('event_id')->setValue([]);
+    }
+    $timezone = $editEventService->service->calendars->get($calendarId)->getTimeZone();
+    if ($event_id) {
+      $data['name'] = $name;
+      $data['location'] = $location;
+      $data['description'] = $description;
+      $data['startDate'] = $start_date;
+      $data['endDate'] = $end_date;
+      $editEventService->patchCalendar($calendarId, $event_id, $data, $timezone);
+    }
+    else {
+      $event = $editEventService->addCalendarEvent($calendarId, $name, $location, $description, $start_date, $end_date, $timezone);
+      $form['#entity']->get('event_id')->setValue([$event->id]);
+    }
+  }
+}
+
+function _validate_time_save_google_event(array $form, $form_state) {
+  $start_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['start_date'][0]['value'];
+  $end_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['end_date'][0]['value'];
+  $name = $form_state->getValue('field_session_details')[0]['inline_entity_form']['name'][0]['value'];
+  $location = $form_state->getValue('field_session_details')[0]['inline_entity_form']['location'][0]['value'];
+  $description = $form_state->getValue('field_session_details')[0]['inline_entity_form']['description'][0]['value'];
+  $calendar_id = $form_state->getValue('field_calendar')[0]['target_id'];
+  if ($start_date instanceof DrupalDateTime && $end_date instanceof DrupalDateTime && is_numeric($calendar_id)) {
+    $start_date = date('c', $start_date->getTimestamp());
+    $end_date = date('c', $end_date->getTimestamp());
+    $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($calendar_id);
+    $calendarId = $calendar->get('calendar_id')->value;
+    $editEventService = \Drupal::service('google_calendar_service.edit_events');
+    $event_id = NULL;
+    if ($form['#entity']->hasField('event_id')) {
+      $event_id = $form['#entity']->get('event_id')->value;
+    }
+    $time_available = $editEventService->verifyTimeGoogleCalendar($calendarId, $start_date, $end_date, $event_id);
+    //Error message set in verifyTimeGoogleCalendar method.
+  }
+}
 
 /**
  * Implements hook_help().
@@ -42,7 +125,7 @@ function google_calendar_service_cron() {
     ->get('secret_file_uri');
 
   if (!empty($secret_uri)) {
-    $queue = \Drupal::queue('extended_calendar_import_processor');
+    $queue = \Drupal::queue('gcs_calendar_import_processor');
 
     $query = \Drupal::entityTypeManager()
       ->getStorage('gcs_calendar')
@@ -74,6 +157,29 @@ function google_calendar_service_preprocess_calendar_event(array &$variables) {
     $variables['content'][$key] = $variables['elements'][$key];
   }
 }
+
+use Drupal\Core\Field\BaseFieldDefinition;
+function google_calendar_service_update_8200() {
+  $field_storage_definition = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Validate date and time is available.'))
+    ->setSettings([
+      'on_label' => t('Yes'),
+      'off_label' => t('No'),
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => TRUE,
+      ],
+      'weight' => 20,
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDefaultValue(TRUE);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('validate_date', 'gcs_calendar', 'google_calendar_service', $field_storage_definition);
+}
+
 
 /**
  * Prepares variables for Google Calendar templates.
@@ -109,3 +215,17 @@ function google_calendar_service_views_pre_view(
   }
 
 }
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function google_calendar_service_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if ($entity->getEntityTypeId() === 'gcs_calendar') {
+    $build['#prefix'] = '
+      <ul class="local-actions">
+        <li class="local-actions__item"><a href="/calendar/'.$entity->id().'/events" class="button button--primary">List Events</a></li>
+        <li class="local-actions__item"><a href="/calendar/'.$entity->id().'/event/add" class="button button--action button--primary">Add Event</a></li>
+      </ul>';
+  }
+}
+

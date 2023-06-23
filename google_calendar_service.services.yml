@@ -9,7 +9,7 @@ services:
 
   google_calendar_service.import_events:
     class: Drupal\google_calendar_service\CalendarImport
-    arguments: ['@google_calendar_service.google_http_client', '@config.factory', '@entity_type.manager', '@logger.factory']
+    arguments: ['@google_calendar_service.google_http_client', '@config.factory', '@entity_type.manager', '@logger.factory', '@database']
 
   google_calendar_service.edit_events:
     class: Drupal\google_calendar_service\CalendarEditEvents

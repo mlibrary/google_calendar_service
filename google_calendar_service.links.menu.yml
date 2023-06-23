@@ -1,19 +1,19 @@
 # Menu items definition
 google_calendar_service.admin.structure.settings:
-  title: Googgle Calendar Service Settings
+  title: Google Calendar Service Settings
   description: 'Calendar and events Settings'
   route_name: google_calendar_service.settings
-  parent: system.admin_structure
+  parent: system.admin_config_system
   weight: 100
 
 entity.gcs_calendar.collection:
-  title: 'Google Calendar Service - List'
+  title: 'Google Calendar Service - Calendar List'
   route_name: entity.gcs_calendar.collection
   description: 'List Google Calendar entities'
-  parent: google_calendar_service.admin.structure.settings
+  parent: system.admin_structure
 
-entity.gcs_calendar_event.collection:
-  title: 'Google Calendar Service - Events'
-  description: 'List all Events'
-  route_name: entity.gcs_calendar_event.collection
-  parent: google_calendar_service.admin.structure.settings
+view.gcs_calendar_events.calendar_all_list:
+  route_name: view.gcs_calendar_events.calendar_all_list
+  title: 'Google Calendar Service - View All Events'
+  description: 'List All Google Calendar Events'
+  parent: system.admin_structure

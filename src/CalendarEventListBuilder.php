@@ -41,14 +41,14 @@ class CalendarEventListBuilder extends EntityListBuilder {
       $operations['edit'] = [
         'title' => $this->t('Edit'),
         'weight' => 10,
-        'url' => $entity->toUrl('edit-form')->toString(),
+        'url' => $entity->toUrl('edit-form'),
       ];
     }
 
     $operations['delete'] = [
       'title' => $this->t('Delete'),
       'weight' => 100,
-      'url' => $entity->toUrl('delete-form')->toString(),
+      'url' => $entity->toUrl('delete-form'),
     ];
 
     return $operations;

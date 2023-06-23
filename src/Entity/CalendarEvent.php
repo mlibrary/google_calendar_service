@@ -33,6 +33,9 @@ use Drupal\user\UserInterface;
  *        "html" = "Drupal\google_calendar_service\CalendarHtmlRouteProvider"
  *     }
  *   },
+ *   constraints = {
+ *     "TimeAvailable" = {}
+ *   },
  *   base_table = "gcs_calendar_event",
  *   data_table = "gcs_calendar_event_field_data",
  *   admin_permission = "administer calendars and events",
@@ -46,10 +49,9 @@ use Drupal\user\UserInterface;
  *   },
  *   links = {
  *     "canonical" = "/calendar/event/{gcs_calendar_event}",
- *     "add-form" = "/admin/calendar/event/add",
- *     "edit-form" = "/admin/calendar/event/{gcs_calendar_event}/edit",
- *     "delete-form" = "/admin/calendar/event/{gcs_calendar_event}/delete",
- *     "collection" = "/admin/calendar/events",
+ *     "add-form" = "/calendar/{calendar}/event/add",
+ *     "edit-form" = "/calendar/event/{gcs_calendar_event}/edit",
+ *     "delete-form" = "/calendar/event/{gcs_calendar_event}/delete",
  *   },
  * )
  */
@@ -164,6 +166,21 @@ class CalendarEvent extends ContentEntityBase implements
   /**
    * {@inheritdoc}
    */
+  public function setCalendarId($calendarEntityId) {
+    $this->set('calendar', $calendarEntityId);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCalendarId() {
+    return $this->get('calendar')->target_id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -194,10 +211,9 @@ class CalendarEvent extends ContentEntityBase implements
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Name'))
+      ->setLabel(t('Event Name'))
       ->setDescription(t(
-        'The name of the event. This field is read-only, and should be changed
-        in Google Calendar.'
+        'The name of the event.'
       ))
       ->setSettings([
         'max_length' => 50,
@@ -217,10 +233,9 @@ class CalendarEvent extends ContentEntityBase implements
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['location'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Location'))
+      ->setLabel(t('Remote URL'))
       ->setDescription(t(
-        'Event Location.  This field is read-only, and should be changed in
-        Google Calendar.'
+        'Event URL.'
       ))
       ->setSettings([
         'max_length' => 255,
@@ -258,7 +273,7 @@ class CalendarEvent extends ContentEntityBase implements
     $fields['description'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Description'))
       ->setDescription(t(
-        'This field is read-only, and should be changed in Google Calendar.'
+        'The event description.'
       ))
       ->setSettings([
         'max_length' => 50,
@@ -280,10 +295,9 @@ class CalendarEvent extends ContentEntityBase implements
     $fields['start_date'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Start Date'))
       ->setDescription(t(
-        'Event Start Date.  This field is read-only, and should be changed in
-        Google Calendar.'
+        'Event Start Date.'
       ))
-      ->setRequired(TRUE)
+      ->setRequired(FALSE)
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'timestamp',
@@ -299,10 +313,9 @@ class CalendarEvent extends ContentEntityBase implements
     $fields['end_date'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('End Date'))
       ->setDescription(t(
-        'Event End Date.  This field is read-only, and should be changed in
-        Google Calendar.'
+        'Event End Date.'
       ))
-      ->setRequired(TRUE)
+      ->setRequired(FALSE)
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'timestamp',

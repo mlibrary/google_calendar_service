@@ -245,6 +245,7 @@ class CalendarImport {
     $query = $this->entityTypeManager
       ->getStorage('gcs_calendar_event')
       ->getQuery()
+      ->condition('calendar', $calendar->id(), 'IN')
       ->condition('event_id', $event_ids, 'IN');
 
     $existent_event_ids = $query->execute();
@@ -262,6 +263,7 @@ class CalendarImport {
     // Delete events if are not in the $events.
     if (!empty($existent_event_ids)) {
       $this->database->delete('gcs_calendar_event')
+        ->condition('calendar', $calendar->id(), 'IN')
         ->condition('id', array_values($existent_event_ids), 'NOT IN')
         ->execute();
     }

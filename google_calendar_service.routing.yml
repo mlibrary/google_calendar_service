@@ -13,7 +13,7 @@ google_calendar_service.settings:
   requirements:
     _permission: 'administer calendars and events'
 google_calendar_service.gcs_calendar_event_add:
-  path: '/admin/calendar/event/add'
+  path: '/calendar/{calendar}/event/add'
   defaults:
   # Calls the form.add controller, defined in the contact entity.
     _entity_form: gcs_calendar_event.add
@@ -21,7 +21,7 @@ google_calendar_service.gcs_calendar_event_add:
   requirements:
     _entity_create_access: 'gcs_calendar_event'
 entity.gcs_calendar_event.delete_form:
-  path: '/admin/calendar/event/{gcs_calendar_event}/delete'
+  path: '/calendar/event/{gcs_calendar_event}/delete'
   defaults:
     # Calls the form.delete controller, defined in the contact entity.
     _entity_form: gcs_calendar_event.delete
@@ -30,3 +30,15 @@ entity.gcs_calendar_event.delete_form:
     # Calls the access controller of the entity, passing in the suffix
     # ('delete') as the $operation parameter to checkAccess().
     _entity_access: 'gcs_calendar_event.delete'
+google_calendar_service.view_events:
+  path: '/calendar/event/{gcs_calendar_event}'
+  defaults:
+    _title: 'view published google calendar event entities'
+  requirements:
+    _permission: 'view published calendars and events'
+google_calendar_service.edit_events:
+  path: '/calendar/event/{gcs_calendar_event}/edit'
+  defaults:
+    _title: 'edit google calendar event entities'
+  requirements:
+    _entity_access: 'gcs_calendar_event.edit'

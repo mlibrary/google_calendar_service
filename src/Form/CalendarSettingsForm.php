@@ -164,7 +164,7 @@ class CalendarSettingsForm extends ConfigFormBase {
       $form['client_secret'] = [
         '#type' => 'managed_file',
         '#title' => $this->t('Client Secret File'),
-        '#upload_location' => 'public://google-calendar-service/',
+        '#upload_location' => 'private://google-calendar-service/',
         '#default_value' => "",
         '#description' => $this->t(
           'Client Secret JSON file downloaded from Google Calendar.'
@@ -196,9 +196,11 @@ class CalendarSettingsForm extends ConfigFormBase {
     $config = $this->config('google_calendar_service.default');
 
     // Check of file has been uploaded corectly and set it permanently.
-    $file = $this->entityManager->getStorage('file')->load(
-      reset($form_state->getValue('client_secret'))
-    );
+    if ($form_state->getValue('client_secret')) {
+      $file = $this->entityManager->getStorage('file')->load(
+        reset($form_state->getValue('client_secret'))
+      );
+    }
 
     if ($file) {
       $file->setPermanent();

@@ -14,6 +14,7 @@ use Drupal\google_calendar_service\Entity\Calendar;
 use Google_Service_Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Form controller for Google Calendar Event edit forms.
@@ -46,6 +47,8 @@ class CalendarEventForm extends ContentEntityForm {
   /**
    * CalendarEventForm constructor.
    *
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
@@ -60,17 +63,19 @@ class CalendarEventForm extends ContentEntityForm {
    *   The private store factory.
    */
   public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
+    EntityRepositoryInterface $entity_repository,
     EntityTypeBundleInfoInterface $bundle_info = NULL,
     TimeInterface $time = NULL,
     CalendarEditEvents $editEvent,
     MessengerInterface $messenger,
-    PrivateTempStoreFactory $tempstore) {
+    PrivateTempStoreFactory $tempstore,
+    EntityTypeManagerInterface $entity_type_manager) {
 
-    parent::__construct($entity_type_manager, $bundle_info, $time);
+    parent::__construct($entity_repository, $bundle_info, $time);
     $this->editEvent = $editEvent;
     $this->messenger = $messenger;
     $this->tempstore = $tempstore;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -78,19 +83,20 @@ class CalendarEventForm extends ContentEntityForm {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager'),
+      $container->get('entity.repository'),
       $container->get('entity_type.bundle.info'),
       $container->get('datetime.time'),
       $container->get('google_calendar_service.edit_events'),
       $container->get('messenger'),
-      $container->get('tempstore.private')
+      $container->get('tempstore.private'),
+      $container->get('entity_type.manager')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, $calendar = NULL) {
     // @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendarEvent.
     $form = parent::buildForm($form, $form_state);
     // Get the event id.
@@ -99,7 +105,7 @@ class CalendarEventForm extends ContentEntityForm {
     $eventId = $entity->getEntity()->getGoogleEventId();
     $calendarId = $entity->getEntity()->get('calendar')->getValue() ?
       $entity->getEntity()->get('calendar')->getValue()[0]['target_id'] :
-      NULL;
+      $calendar;
     $form_state->set('event_id', $eventId);
     $form_state->set('calendar_id', $calendarId);
     $form['start_date']['#required'] = TRUE;
@@ -136,7 +142,7 @@ class CalendarEventForm extends ContentEntityForm {
 
     // Get calendar id.
     $tempStore = $this->tempstore->get('google_calendar_service');
-    $calendarId = $tempStore->get('calendarId');
+    $calendarId = $form_state->get('calendar_id') ?: $tempStore->get('calendarId');
 
     switch ($status) {
       case SAVED_NEW:
@@ -212,12 +218,6 @@ class CalendarEventForm extends ContentEntityForm {
           ]
         ));
     }
-
-    $url = Url::fromRoute(
-      'view.gcs_calendar_events.calendar_list',
-      ['arg_0' => $calendarId]
-    );
-    $form_state->setRedirectUrl($url);
   }
 
   /**

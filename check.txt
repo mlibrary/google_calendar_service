@@ -1,0 +1,2111 @@
+diff --git a/config/install/views.view.gcs_calendar_events.yml b/config/install/views.view.gcs_calendar_events.yml
+index 780f8d2..9a6e036 100755
+--- a/config/install/views.view.gcs_calendar_events.yml
++++ b/config/install/views.view.gcs_calendar_events.yml
+@@ -7,7 +7,7 @@ dependencies:
+     - text
+     - user
+ _core:
+-  default_config_hash: yGvATHKRld7EBv0Oa14wDID4y_yIdxka3JFHTa3ymWE
++  default_config_hash: SkyoRltzo5JbqSSulKkwBRDOee47a8FHieo66joEclM
+ id: gcs_calendar_events
+ label: 'Calendar Events'
+ module: views
+@@ -15,46 +15,536 @@ description: 'Lists events imported from google calendars'
+ tag: ''
+ base_table: gcs_calendar_event
+ base_field: id
+-core: 8.x
+ display:
+   default:
+-    display_plugin: default
+     id: default
+     display_title: Master
++    display_plugin: default
+     position: 0
+     display_options:
+-      access:
+-        type: perm
+-        options:
+-          perm: 'view unpublished google calendar event entities'
+-      cache:
+-        type: tag
+-        options: {  }
+-      query:
+-        type: views_query
+-        options:
+-          disable_sql_rewrite: false
+-          distinct: false
+-          replica: false
+-          query_comment: ''
+-          query_tags: {  }
+-      exposed_form:
+-        type: basic
+-        options:
+-          submit_button: Apply
+-          reset_button: false
+-          reset_button_label: Reset
+-          exposed_sorts_label: 'Sort by'
+-          expose_sort_order: true
+-          sort_asc_label: Asc
+-          sort_desc_label: Desc
++      title: 'Google Calendar Events'
++      fields:
++        name:
++          id: name
++          table: gcs_calendar_event
++          field: name
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: null
++          entity_field: name
++          plugin_id: field
++          label: 'Event Name'
++          exclude: false
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          click_sort_column: value
++          type: string
++          settings:
++            link_to_entity: true
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++        calendar:
++          id: calendar
++          table: gcs_calendar_event
++          field: calendar
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          entity_field: calendar
++          plugin_id: field
++          label: 'Google Calendar'
++          exclude: true
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          click_sort_column: target_id
++          type: entity_reference_label
++          settings:
++            link: true
++          group_column: target_id
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++        start_date:
++          id: start_date
++          table: gcs_calendar_event
++          field: start_date
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          entity_field: start_date
++          plugin_id: field
++          label: 'Start Date'
++          exclude: false
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          click_sort_column: value
++          type: timestamp
++          settings:
++            date_format: medium
++            custom_date_format: ''
++            timezone: ''
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++        end_date:
++          id: end_date
++          table: gcs_calendar_event
++          field: end_date
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          entity_field: end_date
++          plugin_id: field
++          label: 'End Date'
++          exclude: false
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          click_sort_column: value
++          type: timestamp
++          settings:
++            date_format: medium
++            custom_date_format: ''
++            timezone: ''
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++        changed:
++          id: changed
++          table: gcs_calendar_event
++          field: changed
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          entity_field: changed
++          plugin_id: field
++          label: Updated
++          exclude: false
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          click_sort_column: value
++          type: timestamp
++          settings:
++            date_format: medium
++            custom_date_format: ''
++            timezone: ''
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++        operations:
++          id: operations
++          table: gcs_calendar_event
++          field: operations
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          plugin_id: entity_operations
++          label: Actions
++          exclude: false
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          destination: true
++        description__value:
++          id: description__value
++          table: gcs_calendar_event
++          field: description__value
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          entity_field: description
++          plugin_id: field
++          label: Description
++          exclude: true
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          click_sort_column: value
++          type: text_default
++          settings: {  }
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++        location:
++          id: location
++          table: gcs_calendar_event
++          field: location
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          entity_field: location
++          plugin_id: field
++          label: Location
++          exclude: true
++          alter:
++            alter_text: false
++            text: ''
++            make_link: false
++            path: ''
++            absolute: false
++            external: false
++            replace_spaces: false
++            path_case: none
++            trim_whitespace: false
++            alt: ''
++            rel: ''
++            link_class: ''
++            prefix: ''
++            suffix: ''
++            target: ''
++            nl2br: false
++            max_length: 0
++            word_boundary: true
++            ellipsis: true
++            more_link: false
++            more_link_text: ''
++            more_link_path: ''
++            strip_tags: false
++            trim: false
++            preserve_tags: ''
++            html: false
++          element_type: ''
++          element_class: ''
++          element_label_type: ''
++          element_label_class: ''
++          element_label_colon: true
++          element_wrapper_type: ''
++          element_wrapper_class: ''
++          element_default_classes: true
++          empty: ''
++          hide_empty: false
++          empty_zero: false
++          hide_alter_empty: true
++          click_sort_column: value
++          type: string
++          settings:
++            link_to_entity: false
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
+       pager:
+         type: mini
+         options:
+-          items_per_page: 25
+           offset: 0
+-          id: 0
++          items_per_page: 25
+           total_pages: null
++          id: 0
++          tags:
++            next: ‹‹
++            previous: ››
+           expose:
+             items_per_page: false
+             items_per_page_label: 'Items per page'
+@@ -63,31 +553,139 @@ display:
+             items_per_page_options_all_label: '- All -'
+             offset: false
+             offset_label: Offset
+-          tags:
+-            previous: ‹‹
+-            next: ››
++      exposed_form:
++        type: basic
++        options:
++          submit_button: Apply
++          reset_button: false
++          reset_button_label: Reset
++          exposed_sorts_label: 'Sort by'
++          expose_sort_order: true
++          sort_asc_label: Asc
++          sort_desc_label: Desc
++      access:
++        type: perm
++        options:
++          perm: 'view events'
++      cache:
++        type: tag
++        options: {  }
++      empty: {  }
++      sorts: {  }
++      arguments:
++        calendar:
++          id: calendar
++          table: gcs_calendar_event
++          field: calendar
++          relationship: none
++          group_type: group
++          admin_label: ''
++          entity_type: gcs_calendar_event
++          entity_field: gcs_calendar
++          plugin_id: numeric
++          default_action: default
++          exception:
++            value: ''
++            title_enable: false
++            title: All
++          title_enable: true
++          title: '{{ arguments.calendar }} Events'
++          default_argument_type: raw
++          default_argument_options:
++            index: 2
++            use_alias: false
++          default_argument_skip_url: false
++          summary_options:
++            base_path: ''
++            count: true
++            override: false
++            items_per_page: 25
++          summary:
++            sort_order: asc
++            number_of_records: 0
++            format: default_summary
++          specify_validation: true
++          validate:
++            type: 'entity:gcs_calendar'
++            fail: 'not found'
++          validate_options:
++            bundles: {  }
++            access: true
++            operation: view
++            multiple: 0
++          break_phrase: false
++          not: false
++      filters:
++        combine:
++          id: combine
++          table: views
++          field: combine
++          relationship: none
++          group_type: group
++          admin_label: ''
++          plugin_id: combine
++          operator: contains
++          value: ''
++          group: 1
++          exposed: true
++          expose:
++            operator_id: combine_op
++            label: Search
++            description: ''
++            use_operator: false
++            operator: combine_op
++            operator_limit_selection: false
++            operator_list: {  }
++            identifier: search
++            required: false
++            remember: false
++            multiple: false
++            remember_roles:
++              authenticated: authenticated
++              anonymous: '0'
++              administrator: '0'
++          is_grouped: false
++          group_info:
++            label: ''
++            description: ''
++            identifier: ''
++            optional: true
++            widget: select
++            multiple: false
++            remember: false
++            default_group: All
++            default_group_multiple: {  }
++            group_items: {  }
++          fields:
++            name: name
++            description__value: description__value
++            location: location
+       style:
+         type: table
+         options:
+           grouping: {  }
+           row_class: ''
+           default_row_class: true
+-          override: true
+-          sticky: false
+-          caption: ''
+-          summary: ''
+-          description: ''
+           columns:
+             name: name
++            calendar: calendar
+             start_date: start_date
+             end_date: end_date
+             changed: changed
+             operations: operations
+             description__value: description__value
+             location: location
++          default: start_date
+           info:
+             name:
+-              sortable: false
++              sortable: true
++              default_sort_order: asc
++              align: ''
++              separator: ''
++              empty_column: false
++              responsive: ''
++            calendar:
++              sortable: true
+               default_sort_order: asc
+               align: ''
+               separator: ''
+@@ -133,10 +731,52 @@ display:
+               separator: ''
+               empty_column: false
+               responsive: ''
+-          default: changed
++          override: true
++          sticky: false
++          summary: ''
+           empty_table: false
++          caption: ''
++          description: ''
+       row:
+         type: fields
++      query:
++        type: views_query
++        options:
++          query_comment: ''
++          disable_sql_rewrite: false
++          distinct: false
++          replica: false
++          query_tags: {  }
++      relationships: {  }
++      header:
++        area_text_custom:
++          id: area_text_custom
++          table: views
++          field: area_text_custom
++          relationship: none
++          group_type: group
++          admin_label: ''
++          plugin_id: text_custom
++          empty: true
++          content: "<ul class=\"local-actions\">\r\n<li class=\"local-actions__item\"><a href=\"/calendar/{{ raw_arguments.calendar }}/event/add\" class=\"button button--action button--primary\">Add Event</a></li>\r\n<li class=\"local-actions__item\"><a href=\"/calendar/{{ raw_arguments.calendar }}/import?destination=/calendar/{{ raw_arguments.calendar }}/events\" class=\"button button--primary\">Import Events</a></li>\r\n</ul>"
++          tokenize: true
++      footer: {  }
++      display_extenders: {  }
++    cache_metadata:
++      max-age: -1
++      contexts:
++        - 'languages:language_content'
++        - 'languages:language_interface'
++        - url
++        - url.query_args
++        - user.permissions
++      tags: {  }
++  calendar_all_list:
++    id: calendar_all_list
++    display_title: Page
++    display_plugin: page
++    position: 1
++    display_options:
+       fields:
+         name:
+           id: name
+@@ -145,6 +785,9 @@ display:
+           relationship: none
+           group_type: group
+           admin_label: ''
++          entity_type: null
++          entity_field: name
++          plugin_id: field
+           label: 'Event Name'
+           exclude: false
+           alter:
+@@ -200,17 +843,17 @@ display:
+           multi_type: separator
+           separator: ', '
+           field_api_classes: false
+-          entity_type: null
+-          entity_field: name
+-          plugin_id: field
+-        start_date:
+-          id: start_date
++        calendar:
++          id: calendar
+           table: gcs_calendar_event
+-          field: start_date
++          field: calendar
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          label: 'Start Date'
++          entity_type: gcs_calendar_event
++          entity_field: calendar
++          plugin_id: field
++          label: 'Google Calendar'
+           exclude: false
+           alter:
+             alter_text: false
+@@ -251,13 +894,11 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
+-          click_sort_column: value
+-          type: timestamp
++          click_sort_column: target_id
++          type: entity_reference_label
+           settings:
+-            date_format: medium
+-            custom_date_format: ''
+-            timezone: ''
+-          group_column: value
++            link: true
++          group_column: target_id
+           group_columns: {  }
+           group_rows: true
+           delta_limit: 0
+@@ -267,17 +908,17 @@ display:
+           multi_type: separator
+           separator: ', '
+           field_api_classes: false
+-          entity_type: gcs_calendar_event
+-          entity_field: start_date
+-          plugin_id: field
+-        end_date:
+-          id: end_date
++        start_date:
++          id: start_date
+           table: gcs_calendar_event
+-          field: end_date
++          field: start_date
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          label: 'End Date'
++          entity_type: gcs_calendar_event
++          entity_field: start_date
++          plugin_id: field
++          label: 'Start Date'
+           exclude: false
+           alter:
+             alter_text: false
+@@ -334,17 +975,17 @@ display:
+           multi_type: separator
+           separator: ', '
+           field_api_classes: false
+-          entity_type: gcs_calendar_event
+-          entity_field: end_date
+-          plugin_id: field
+-        changed:
+-          id: changed
++        end_date:
++          id: end_date
+           table: gcs_calendar_event
+-          field: changed
++          field: end_date
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          label: Updated
++          entity_type: gcs_calendar_event
++          entity_field: end_date
++          plugin_id: field
++          label: 'End Date'
+           exclude: false
+           alter:
+             alter_text: false
+@@ -401,17 +1042,17 @@ display:
+           multi_type: separator
+           separator: ', '
+           field_api_classes: false
+-          entity_type: gcs_calendar_event
+-          entity_field: changed
+-          plugin_id: field
+-        operations:
+-          id: operations
++        changed:
++          id: changed
+           table: gcs_calendar_event
+-          field: operations
++          field: changed
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          label: Actions
++          entity_type: gcs_calendar_event
++          entity_field: changed
++          plugin_id: field
++          label: Updated
+           exclude: false
+           alter:
+             alter_text: false
+@@ -452,18 +1093,33 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
+-          destination: true
+-          entity_type: gcs_calendar_event
+-          plugin_id: entity_operations
+-        description__value:
+-          id: description__value
++          click_sort_column: value
++          type: timestamp
++          settings:
++            date_format: medium
++            custom_date_format: ''
++            timezone: ''
++          group_column: value
++          group_columns: {  }
++          group_rows: true
++          delta_limit: 0
++          delta_offset: 0
++          delta_reversed: false
++          delta_first_last: false
++          multi_type: separator
++          separator: ', '
++          field_api_classes: false
++        operations:
++          id: operations
+           table: gcs_calendar_event
+-          field: description__value
++          field: operations
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          label: Description
+-          exclude: true
++          entity_type: gcs_calendar_event
++          plugin_id: entity_operations
++          label: Actions
++          exclude: false
+           alter:
+             alter_text: false
+             text: ''
+@@ -503,30 +1159,18 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
+-          click_sort_column: value
+-          type: text_default
+-          settings: {  }
+-          group_column: value
+-          group_columns: {  }
+-          group_rows: true
+-          delta_limit: 0
+-          delta_offset: 0
+-          delta_reversed: false
+-          delta_first_last: false
+-          multi_type: separator
+-          separator: ', '
+-          field_api_classes: false
+-          entity_type: gcs_calendar_event
+-          entity_field: description
+-          plugin_id: field
+-        location:
+-          id: location
++          destination: true
++        description__value:
++          id: description__value
+           table: gcs_calendar_event
+-          field: location
++          field: description__value
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          label: Location
++          entity_type: gcs_calendar_event
++          entity_field: description
++          plugin_id: field
++          label: Description
+           exclude: true
+           alter:
+             alter_text: false
+@@ -568,9 +1212,8 @@ display:
+           empty_zero: false
+           hide_alter_empty: true
+           click_sort_column: value
+-          type: string
+-          settings:
+-            link_to_entity: false
++          type: text_default
++          settings: {  }
+           group_column: value
+           group_columns: {  }
+           group_rows: true
+@@ -581,17 +1224,17 @@ display:
+           multi_type: separator
+           separator: ', '
+           field_api_classes: false
+-          entity_type: gcs_calendar_event
+-          entity_field: location
+-          plugin_id: field
+-        calendar:
+-          id: calendar
++        location:
++          id: location
+           table: gcs_calendar_event
+-          field: calendar
++          field: location
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          label: 'Google Calendar'
++          entity_type: gcs_calendar_event
++          entity_field: location
++          plugin_id: field
++          label: Location
+           exclude: true
+           alter:
+             alter_text: false
+@@ -632,11 +1275,11 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
+-          click_sort_column: target_id
+-          type: entity_reference_label
++          click_sort_column: value
++          type: string
+           settings:
+-            link: false
+-          group_column: target_id
++            link_to_entity: false
++          group_column: value
+           group_columns: {  }
+           group_rows: true
+           delta_limit: 0
+@@ -646,54 +1289,11 @@ display:
+           multi_type: separator
+           separator: ', '
+           field_api_classes: false
+-          entity_type: gcs_calendar_event
+-          entity_field: calendar
+-          plugin_id: field
+-      filters:
+-        combine:
+-          id: combine
+-          table: views
+-          field: combine
+-          relationship: none
+-          group_type: group
+-          admin_label: ''
+-          operator: contains
+-          value: ''
+-          group: 1
+-          exposed: true
+-          expose:
+-            operator_id: combine_op
+-            label: Search
+-            description: ''
+-            use_operator: false
+-            operator: combine_op
+-            identifier: search
+-            required: false
+-            remember: false
+-            multiple: false
+-            remember_roles:
+-              authenticated: authenticated
+-              anonymous: '0'
+-              administrator: '0'
+-          is_grouped: false
+-          group_info:
+-            label: ''
+-            description: ''
+-            identifier: ''
+-            optional: true
+-            widget: select
+-            multiple: false
+-            remember: false
+-            default_group: All
+-            default_group_multiple: {  }
+-            group_items: {  }
+-          fields:
+-            name: name
+-            description__value: description__value
+-            location: location
+-          plugin_id: combine
+-      sorts: {  }
+-      title: 'Google Calendar Events'
++      arguments: {  }
++      defaults:
++        fields: false
++        arguments: false
++        header: false
+       header:
+         area_text_custom:
+           id: area_text_custom
+@@ -702,70 +1302,12 @@ display:
+           relationship: none
+           group_type: group
+           admin_label: ''
+-          empty: true
+-          tokenize: true
+-          content: '<h2>{{ calendar }} Events</h2>'
+           plugin_id: text_custom
+-        area:
+-          id: area
+-          table: views
+-          field: area
+-          relationship: none
+-          group_type: group
+-          admin_label: ''
+           empty: true
+-          tokenize: false
+-          content:
+-            value: '<a href="/admin/calendar/event/add">Add calendar event</a>'
+-            format: basic_html
+-          plugin_id: text
+-      footer: {  }
+-      empty: {  }
+-      relationships: {  }
+-      arguments:
+-        calendar:
+-          id: calendar
+-          table: gcs_calendar_event
+-          field: calendar
+-          relationship: none
+-          group_type: group
+-          admin_label: ''
+-          default_action: default
+-          exception:
+-            value: all
+-            title_enable: false
+-            title: All
+-          title_enable: false
+-          title: ''
+-          default_argument_type: raw
+-          default_argument_options:
+-            index: 2
+-            use_alias: false
+-          default_argument_skip_url: false
+-          summary_options:
+-            base_path: ''
+-            count: true
+-            items_per_page: 25
+-            override: false
+-          summary:
+-            sort_order: asc
+-            number_of_records: 0
+-            format: default_summary
+-          specify_validation: true
+-          validate:
+-            type: 'entity:gcs_calendar'
+-            fail: empty
+-          validate_options:
+-            operation: view
+-            multiple: 0
+-            access: false
+-            bundles: null
+-          break_phrase: false
+-          not: false
+-          entity_type: gcs_calendar_event
+-          entity_field: gcs_calendar
+-          plugin_id: numeric
++          content: "<ul class=\"local-actions\">\r\n<li class=\"local-actions__item\"><a href=\"/calendar\" class=\"button button--primary\">List Calendars</a></li>\r\n<li class=\"local-actions__item\"><a href=\"/calendar/all/import\" class=\"button button--primary\">Import Events from All Calendars</a></li>\r\n</ul>\r\n<h3>Events may be added from Calendar pages</h3>"
++          tokenize: true
+       display_extenders: {  }
++      path: calendar/events
+     cache_metadata:
+       max-age: -1
+       contexts:
+@@ -776,13 +1318,13 @@ display:
+         - user.permissions
+       tags: {  }
+   calendar_list:
+-    display_plugin: page
+     id: calendar_list
+     display_title: Page
++    display_plugin: page
+     position: 1
+     display_options:
+       display_extenders: {  }
+-      path: admin/extened-google-calendar/%/events
++      path: calendar/%/events
+     cache_metadata:
+       max-age: -1
+       contexts:
+@@ -792,3 +1334,4 @@ display:
+         - url.query_args
+         - user.permissions
+       tags: {  }
++
+diff --git a/google_calendar_service.links.action.yml b/google_calendar_service.links.action.yml
+index 5f6ccc4..0121822 100755
+--- a/google_calendar_service.links.action.yml
++++ b/google_calendar_service.links.action.yml
+@@ -3,3 +3,9 @@ entity.gcs_calendar.add_form:
+   title: 'Add Calendar'
+   appears_on:
+     - entity.gcs_calendar.collection
++
++view.gcs_calendar_events.calendar_all_list:
++  route_name: view.gcs_calendar_events.calendar_all_list
++  title: 'View All Events'
++  appears_on:
++    - entity.gcs_calendar.collection
+diff --git a/google_calendar_service.links.menu.yml b/google_calendar_service.links.menu.yml
+index 079622c..55b0320 100755
+--- a/google_calendar_service.links.menu.yml
++++ b/google_calendar_service.links.menu.yml
+@@ -1,19 +1,19 @@
+ # Menu items definition
+ google_calendar_service.admin.structure.settings:
+-  title: Googgle Calendar Service Settings
++  title: Google Calendar Service Settings
+   description: 'Calendar and events Settings'
+   route_name: google_calendar_service.settings
+-  parent: system.admin_structure
++  parent: system.admin_config_system
+   weight: 100
+ 
+ entity.gcs_calendar.collection:
+-  title: 'Google Calendar Service - List'
++  title: 'Google Calendar Service - Calendar List'
+   route_name: entity.gcs_calendar.collection
+   description: 'List Google Calendar entities'
+-  parent: google_calendar_service.admin.structure.settings
++  parent: system.admin_structure
+ 
+-entity.gcs_calendar_event.collection:
+-  title: 'Google Calendar Service - Events'
+-  description: 'List all Events'
+-  route_name: entity.gcs_calendar_event.collection
+-  parent: google_calendar_service.admin.structure.settings
++view.gcs_calendar_events.calendar_all_list:
++  route_name: view.gcs_calendar_events.calendar_all_list
++  title: 'Google Calendar Service - View All Events'
++  description: 'List All Google Calendar Events'
++  parent: system.admin_structure
+diff --git a/google_calendar_service.module b/google_calendar_service.module
+index 9d35399..e17bd55 100755
+--- a/google_calendar_service.module
++++ b/google_calendar_service.module
+@@ -9,6 +9,89 @@ use Drupal\Core\Routing\RouteMatchInterface;
+ use Drupal\Core\Render\Element;
+ use Drupal\google_calendar_service\Entity\Calendar;
+ use Drupal\views\ViewExecutable;
++use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
++
++/**
++ * Implements hook_inline_entity_form_entity_form_alter().
++ */
++function google_calendar_service_inline_entity_form_entity_form_alter(array &$entity_form, &$form_state) {
++  if ($entity_form['#entity_type'] == 'gcs_calendar_event') {
++    $calendar_id = $form_state->getValue('field_calendar')[0];
++    $entity_form['#entity']->setCalendarId($calendar_id);
++    $entity_form['#element_validate'][] = '_validate_time_save_google_event';
++    $entity_form['#ief_element_submit'][] = '_save_google_event_form_submit';
++    $submit_handlers = $form_state->getSubmitHandlers();
++    $submit_handlers[] = '_save_google_event_form_submit';
++    $form_state->setSubmitHandlers($submit_handlers);
++  }
++}
++
++use Drupal\Core\Datetime\DrupalDateTime;
++
++function _save_google_event_form_submit(array &$form, $form_state) {
++  $start_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['start_date'][0]['value'];
++  $end_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['end_date'][0]['value'];
++  $name = $form_state->getValue('field_session_details')[0]['inline_entity_form']['name'][0]['value'];
++  $location = $form_state->getValue('field_session_details')[0]['inline_entity_form']['location'][0]['value'];
++  $description = $form_state->getValue('field_session_details')[0]['inline_entity_form']['description'][0]['value'];
++  $calendar_id = $form_state->getValue('field_calendar')[0]['target_id'];
++  if ($start_date instanceof DrupalDateTime && $end_date instanceof DrupalDateTime && is_numeric($calendar_id)) {
++    $editEventService = \Drupal::service('google_calendar_service.edit_events');
++    $start_date = date('c', $start_date->getTimestamp());
++    $end_date = date('c', $end_date->getTimestamp());
++    $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($calendar_id);
++    $calendarId = $calendar->get('calendar_id')->value;
++    $event_id = NULL;
++    if ($form['#entity']->hasField('event_id')) {
++      $event_id = $form['#entity']->get('event_id')->value;
++    }
++    $node = $form_state->getFormObject()->getEntity();
++    $old_calendar_id = $node->get('field_calendar')->target_id;
++    if ($old_calendar_id && $old_calendar_id != $calendar_id) {
++      $old_calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($old_calendar_id);
++      $old_calendarId = $old_calendar->get('calendar_id')->value;
++      $editEventService->deleteGoogleCalendar($old_calendarId, $event_id);
++      $event_id = NULL;
++      $form['#entity']->get('event_id')->setValue([]);
++    }
++    $timezone = $editEventService->service->calendars->get($calendarId)->getTimeZone();
++    if ($event_id) {
++      $data['name'] = $name;
++      $data['location'] = $location;
++      $data['description'] = $description;
++      $data['startDate'] = $start_date;
++      $data['endDate'] = $end_date;
++      $editEventService->patchCalendar($calendarId, $event_id, $data, $timezone);
++    }
++    else {
++      $event = $editEventService->addCalendarEvent($calendarId, $name, $location, $description, $start_date, $end_date, $timezone);
++      $form['#entity']->get('event_id')->setValue([$event->id]);
++    }
++  }
++}
++
++function _validate_time_save_google_event(array $form, $form_state) {
++  $start_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['start_date'][0]['value'];
++  $end_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['end_date'][0]['value'];
++  $name = $form_state->getValue('field_session_details')[0]['inline_entity_form']['name'][0]['value'];
++  $location = $form_state->getValue('field_session_details')[0]['inline_entity_form']['location'][0]['value'];
++  $description = $form_state->getValue('field_session_details')[0]['inline_entity_form']['description'][0]['value'];
++  $calendar_id = $form_state->getValue('field_calendar')[0]['target_id'];
++  if ($start_date instanceof DrupalDateTime && $end_date instanceof DrupalDateTime && is_numeric($calendar_id)) {
++    $start_date = date('c', $start_date->getTimestamp());
++    $end_date = date('c', $end_date->getTimestamp());
++    $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($calendar_id);
++    $calendarId = $calendar->get('calendar_id')->value;
++    $editEventService = \Drupal::service('google_calendar_service.edit_events');
++    $event_id = NULL;
++    if ($form['#entity']->hasField('event_id')) {
++      $event_id = $form['#entity']->get('event_id')->value;
++    }
++    $time_available = $editEventService->verifyTimeGoogleCalendar($calendarId, $start_date, $end_date, $event_id);
++    //Error message set in verifyTimeGoogleCalendar method.
++  }
++}
+ 
+ /**
+  * Implements hook_help().
+@@ -42,7 +125,7 @@ function google_calendar_service_cron() {
+     ->get('secret_file_uri');
+ 
+   if (!empty($secret_uri)) {
+-    $queue = \Drupal::queue('extended_calendar_import_processor');
++    $queue = \Drupal::queue('gcs_calendar_import_processor');
+ 
+     $query = \Drupal::entityTypeManager()
+       ->getStorage('gcs_calendar')
+@@ -75,6 +158,29 @@ function google_calendar_service_preprocess_calendar_event(array &$variables) {
+   }
+ }
+ 
++use Drupal\Core\Field\BaseFieldDefinition;
++function google_calendar_service_update_8200() {
++  $field_storage_definition = BaseFieldDefinition::create('boolean')
++    ->setLabel(t('Validate date and time is available.'))
++    ->setSettings([
++      'on_label' => t('Yes'),
++      'off_label' => t('No'),
++    ])
++    ->setDisplayOptions('form', [
++      'type' => 'boolean_checkbox',
++      'settings' => [
++        'display_label' => TRUE,
++      ],
++      'weight' => 20,
++    ])
++    ->setDisplayConfigurable('form', TRUE)
++    ->setDefaultValue(TRUE);
++
++  \Drupal::entityDefinitionUpdateManager()
++    ->installFieldStorageDefinition('validate_date', 'gcs_calendar', 'google_calendar_service', $field_storage_definition);
++}
++
++
+ /**
+  * Prepares variables for Google Calendar templates.
+  *
+@@ -109,3 +215,17 @@ function google_calendar_service_views_pre_view(
+   }
+ 
+ }
++
++/**
++ * Implements hook_entity_view_alter().
++ */
++function google_calendar_service_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
++  if ($entity->getEntityTypeId() === 'gcs_calendar') {
++    $build['#prefix'] = '
++      <ul class="local-actions">
++        <li class="local-actions__item"><a href="/calendar/'.$entity->id().'/events" class="button button--primary">List Events</a></li>
++        <li class="local-actions__item"><a href="/calendar/'.$entity->id().'/event/add" class="button button--action button--primary">Add Event</a></li>
++      </ul>';
++  }
++}
++
+diff --git a/google_calendar_service.permissions.yml b/google_calendar_service.permissions.yml
+index 39636b5..ca04b18 100755
+--- a/google_calendar_service.permissions.yml
++++ b/google_calendar_service.permissions.yml
+@@ -1,22 +1,31 @@
+-add calendars and events:
+-  title: 'Create new Google Calendars and events.'
++add calendars:
++  title: 'Create new Google Calendars.'
++
++add events:
++  title: 'Create new Google Calendar events.'
+ 
+ administer calendars and events:
+   title: 'Administer Google Calendars'
+   description: 'Allow to access the administration form to configure Google Calendar.'
+   restrict access: true
+ 
+-delete calendars and events:
++delete calendars:
+   title: 'Delete Google Calendars.'
+ 
+-edit calendars and events:
+-  title: 'Edit Google Calendars and his events.'
++delete events:
++  title: 'Delete Google Calendar events.'
++
++edit calendars:
++  title: 'Edit Google Calendars.'
++
++edit events:
++  title: 'Edit Google Calendar events.'
+ 
+-view published calendars and events:
+-  title: 'View published Google Calendars and his events.'
++view calendars:
++  title: 'View Google Calendars.'
+ 
+-view unpublished calendars and events:
+-  title: 'View unpublished Google Calendars.'
++view events:
++  title: 'View Google Calendar events.'
+ 
+ import calendar events:
+-  title: 'Import events from google Calendar.'
++  title: 'Import events from Google Calendar.'
+diff --git a/google_calendar_service.routing.yml b/google_calendar_service.routing.yml
+index f29adb2..826d11f 100755
+--- a/google_calendar_service.routing.yml
++++ b/google_calendar_service.routing.yml
+@@ -13,7 +13,7 @@ google_calendar_service.settings:
+   requirements:
+     _permission: 'administer calendars and events'
+ google_calendar_service.gcs_calendar_event_add:
+-  path: '/admin/calendar/event/add'
++  path: '/calendar/{calendar}/event/add'
+   defaults:
+   # Calls the form.add controller, defined in the contact entity.
+     _entity_form: gcs_calendar_event.add
+@@ -21,7 +21,7 @@ google_calendar_service.gcs_calendar_event_add:
+   requirements:
+     _entity_create_access: 'gcs_calendar_event'
+ entity.gcs_calendar_event.delete_form:
+-  path: '/admin/calendar/event/{gcs_calendar_event}/delete'
++  path: '/calendar/event/{gcs_calendar_event}/delete'
+   defaults:
+     # Calls the form.delete controller, defined in the contact entity.
+     _entity_form: gcs_calendar_event.delete
+@@ -29,4 +29,16 @@ entity.gcs_calendar_event.delete_form:
+   requirements:
+     # Calls the access controller of the entity, passing in the suffix
+     # ('delete') as the $operation parameter to checkAccess().
+-    _entity_access: 'gcs_calendar_event.delete'
+\ No newline at end of file
++    _entity_access: 'gcs_calendar_event.delete'
++google_calendar_service.view_events:
++  path: '/calendar/event/{gcs_calendar_event}'
++  defaults:
++    _title: 'view published google calendar event entities'
++  requirements:
++    _permission: 'view published calendars and events'
++google_calendar_service.edit_events:
++  path: '/calendar/event/{gcs_calendar_event}/edit'
++  defaults:
++    _title: 'edit google calendar event entities'
++  requirements:
++    _entity_access: 'gcs_calendar_event.edit'
+diff --git a/google_calendar_service.services.yml b/google_calendar_service.services.yml
+index f07b483..bf41047 100755
+--- a/google_calendar_service.services.yml
++++ b/google_calendar_service.services.yml
+@@ -9,7 +9,7 @@ services:
+ 
+   google_calendar_service.import_events:
+     class: Drupal\google_calendar_service\CalendarImport
+-    arguments: ['@google_calendar_service.google_http_client', '@config.factory', '@entity_type.manager', '@logger.factory']
++    arguments: ['@google_calendar_service.google_http_client', '@config.factory', '@entity_type.manager', '@logger.factory', '@database']
+ 
+   google_calendar_service.edit_events:
+     class: Drupal\google_calendar_service\CalendarEditEvents
+diff --git a/src/CalendarEditEvents.php b/src/CalendarEditEvents.php
+index 3cd3625..d9b403a 100755
+--- a/src/CalendarEditEvents.php
++++ b/src/CalendarEditEvents.php
+@@ -9,6 +9,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+ use Google_Client;
+ use Google_Service_Calendar;
+ use Google_Service_Exception;
++use Google_Service_Calendar_EventAttendee;
+ 
+ /**
+  * Class CalendarImport.
+@@ -175,6 +176,17 @@ class CalendarEditEvents {
+       $event->setDescription($eventDescription);
+     }
+ 
++//$attendeeNew = ['email' => 'eliotwsc@umich.edu',];
++$attendeeNew = new Google_Service_Calendar_EventAttendee();
++$attendeeNew->setEmail('eliotwsc@umich.edu');
++$attendeeNew->setResponseStatus('accepted');
++//$attendeeNew->setOrganizer(true);
++dpm($attendeeNew);
++$attendees = $event->getAttendees();
++$attendees = $attendees ?? [];
++array_push($attendees,$attendeeNew);
++$event->setAttendees($attendees);
++
+     try {
+       return $this->service->events->insert($calendarId, $event);
+     }
+@@ -209,4 +221,49 @@ class CalendarEditEvents {
+     }
+   }
+ 
++  /**
++   * Verify time available for google calendar event.
++   *
++   * @param string $calendarId
++   *   The calendar id.
++   * @param string $startTime
++   *   The event start time.
++   * @param string $endTime
++   *   The event end time.
++   *
++   * @return bool
++   *   Return deletion of calendar.
++   */
++  public function verifyTimeGoogleCalendar($calendarId, $startTime, $endTime, $eventId = NULL) {
++    try {
++      $optParams = [
++        'maxResults' => 2,
++        'singleEvents' => TRUE,
++        'showHiddenInvitations' => TRUE,
++        'timeMin' => $startTime,
++        'timeMax' => $endTime,
++      ];
++      $results = $this->service->events->listEvents($calendarId, $optParams);
++      if ($eventId) {
++        foreach ($results->items as $key => $event) {
++          if ($eventId == $event->id) {
++            unset($results->items[$key]);
++          }
++        }
++      }
++      if (empty($results->items)) {
++        return TRUE;
++      }
++      else {
++        return FALSE;
++      }
++    }
++    catch (Google_Service_Exception $e) {
++      // Catch non-authorized exception.
++      if ($e->getCode() == 401) {
++        return FALSE;
++      }
++    }
++  }
++
+ }
+diff --git a/src/CalendarEventListBuilder.php b/src/CalendarEventListBuilder.php
+index 07777b4..c4b874d 100755
+--- a/src/CalendarEventListBuilder.php
++++ b/src/CalendarEventListBuilder.php
+@@ -41,14 +41,14 @@ class CalendarEventListBuilder extends EntityListBuilder {
+       $operations['edit'] = [
+         'title' => $this->t('Edit'),
+         'weight' => 10,
+-        'url' => $entity->toUrl('edit-form')->toString(),
++        'url' => $entity->toUrl('edit-form'),
+       ];
+     }
+ 
+     $operations['delete'] = [
+       'title' => $this->t('Delete'),
+       'weight' => 100,
+-      'url' => $entity->toUrl('delete-form')->toString(),
++      'url' => $entity->toUrl('delete-form'),
+     ];
+ 
+     return $operations;
+diff --git a/src/CalendarImport.php b/src/CalendarImport.php
+index 8bcbcf6..d19b653 100755
+--- a/src/CalendarImport.php
++++ b/src/CalendarImport.php
+@@ -245,6 +245,7 @@ class CalendarImport {
+     $query = $this->entityTypeManager
+       ->getStorage('gcs_calendar_event')
+       ->getQuery()
++      ->condition('calendar', $calendar->id(), 'IN')
+       ->condition('event_id', $event_ids, 'IN');
+ 
+     $existent_event_ids = $query->execute();
+@@ -262,6 +263,7 @@ class CalendarImport {
+     // Delete events if are not in the $events.
+     if (!empty($existent_event_ids)) {
+       $this->database->delete('gcs_calendar_event')
++        ->condition('calendar', $calendar->id(), 'IN')
+         ->condition('id', array_values($existent_event_ids), 'NOT IN')
+         ->execute();
+     }
+diff --git a/src/CalendarListBuilder.php b/src/CalendarListBuilder.php
+index 5899cb8..9a39731 100755
+--- a/src/CalendarListBuilder.php
++++ b/src/CalendarListBuilder.php
+@@ -5,6 +5,7 @@ namespace Drupal\google_calendar_service;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityListBuilder;
+ use Drupal\Core\Url;
++use Drupal\Core\Link;
+ 
+ /**
+  * Defines a class to build a listing of Google Calendar entities.
+@@ -28,7 +29,8 @@ class CalendarListBuilder extends EntityListBuilder {
+    */
+   public function buildRow(EntityInterface $entity) {
+     /* @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendar */
+-    $row['name'] = $entity->label();
++    $url = Url::fromRoute('entity.gcs_calendar.canonical', ['gcs_calendar' => $entity->id()]);
++    $row['name'] = Link::fromTextAndUrl($this->t($entity->label()), $url);
+     $row['id'] = $entity->getGoogleCalendarId();
+ 
+     return $row + parent::buildRow($entity);
+@@ -45,7 +47,7 @@ class CalendarListBuilder extends EntityListBuilder {
+       $operations['edit'] = [
+         'title' => $this->t('Edit'),
+         'weight' => 10,
+-        'url' => $entity->toUrl('edit-form')->toString(),
++        'url' => $entity->toUrl('edit-form'),
+       ];
+     }
+     if ($entity->access('delete') &&
+@@ -54,7 +56,7 @@ class CalendarListBuilder extends EntityListBuilder {
+       $operations['delete'] = [
+         'title' => $this->t('Delete'),
+         'weight' => 100,
+-        'url' => $entity->toUrl('delete-form')->toString(),
++        'url' => $entity->toUrl('delete-form'),
+       ];
+     }
+ 
+@@ -73,7 +75,7 @@ class CalendarListBuilder extends EntityListBuilder {
+       'title' => t('List Events'),
+       'weight' => 15,
+       'url' => Url::fromUserInput(
+-        '/admin/extened-google-calendar/' . $entity->id() . '/events'
++        '/calendar/' . $entity->id() . '/events'
+       ),
+     ];
+ 
+diff --git a/src/Controller/CalendarImportController.php b/src/Controller/CalendarImportController.php
+index ca97c32..8dc7340 100755
+--- a/src/Controller/CalendarImportController.php
++++ b/src/Controller/CalendarImportController.php
+@@ -79,6 +79,11 @@ class CalendarImportController extends ControllerBase {
+    *   Return Hello string.
+    */
+   public function import($calendar = NULL) {
++    if ($calendar == 'all') {
++      $this->importAll();
++
++      return $this->redirect('view.gcs_calendar_events.calendar_all_list');
++    }
+     if (!empty($calendar)) {
+       $cid = $this->requestStack->getCurrentRequest()
+         ->attributes->get('calendar');
+@@ -111,4 +116,34 @@ class CalendarImportController extends ControllerBase {
+     return $this->redirect('entity.gcs_calendar.collection');
+   }
+ 
++  /**
++   * Import all calendars.
++   *
++   */
++  public function importAll() {
++    $calendars = $this->entityManager->getStorage('gcs_calendar')->loadMultiple();
++    foreach ($calendars as $calendar) {
++      if ($calendar instanceof CalendarInterface) {
++        if ($this->calendarImport->import($calendar)) {
++          $this->messenger->addMessage(
++            $this->t(
++              'Events for the <strong>@calendar</strong> Calendar have been
++              imported successfully!',
++              [
++                '@calendar' => $calendar->label(),
++              ]
++            )
++          );
++        }
++        else {
++          $this->messenger->addMessage(
++            $this->t(
++              'Error from Google Calendar API, please check your API settings.'
++            )
++          );
++        }
++      }
++    }
++  }
++
+ }
+diff --git a/src/Entity/Calendar.php b/src/Entity/Calendar.php
+index 85f69d1..2f0b8b8 100755
+--- a/src/Entity/Calendar.php
++++ b/src/Entity/Calendar.php
+@@ -45,10 +45,10 @@ use Drupal\user\UserInterface;
+  *   },
+  *   links = {
+  *     "canonical" = "/calendar/{gcs_calendar}",
+- *     "add-form" = "/admin/calendar/add",
+- *     "edit-form" = "/admin/calendar/{gcs_calendar}/edit",
+- *     "delete-form" = "/admin/calendar/{gcs_calendar}/delete",
+- *     "collection" = "/admin/calendar",
++ *     "add-form" = "/calendar/add",
++ *     "edit-form" = "/calendar/{gcs_calendar}/edit",
++ *     "delete-form" = "/calendar/{gcs_calendar}/delete",
++ *     "collection" = "/calendar",
+  *   },
+  * )
+  */
+@@ -226,6 +226,22 @@ class Calendar extends ContentEntityBase implements CalendarInterface {
+       ->setDisplayConfigurable('form', TRUE)
+       ->setDefaultValue(TRUE);
+ 
++    $fields['validate_date'] = BaseFieldDefinition::create('boolean')
++      ->setLabel(t('Validate date and time is available.'))
++      ->setSettings([
++        'on_label' => t('Yes'),
++        'off_label' => t('No'),
++      ])
++      ->setDisplayOptions('form', [
++        'type' => 'boolean_checkbox',
++        'settings' => [
++          'display_label' => TRUE,
++        ],
++        'weight' => 20,
++      ])
++      ->setDisplayConfigurable('form', TRUE)
++      ->setDefaultValue(TRUE);
++
+     $fields['start_date'] = BaseFieldDefinition::create('timestamp')
+       ->setLabel(t('Start Date'))
+       ->setDescription(t(
+diff --git a/src/Entity/CalendarEvent.php b/src/Entity/CalendarEvent.php
+old mode 100755
+new mode 100644
+index 858dadd..e4afde7
+--- a/src/Entity/CalendarEvent.php
++++ b/src/Entity/CalendarEvent.php
+@@ -33,6 +33,9 @@ use Drupal\user\UserInterface;
+  *        "html" = "Drupal\google_calendar_service\CalendarHtmlRouteProvider"
+  *     }
+  *   },
++ *   constraints = {
++ *     "TimeAvailable" = {}
++ *   },
+  *   base_table = "gcs_calendar_event",
+  *   data_table = "gcs_calendar_event_field_data",
+  *   admin_permission = "administer calendars and events",
+@@ -46,10 +49,9 @@ use Drupal\user\UserInterface;
+  *   },
+  *   links = {
+  *     "canonical" = "/calendar/event/{gcs_calendar_event}",
+- *     "add-form" = "/admin/calendar/event/add",
+- *     "edit-form" = "/admin/calendar/event/{gcs_calendar_event}/edit",
+- *     "delete-form" = "/admin/calendar/event/{gcs_calendar_event}/delete",
+- *     "collection" = "/admin/calendar/events",
++ *     "add-form" = "/calendar/{calendar}/event/add",
++ *     "edit-form" = "/calendar/event/{gcs_calendar_event}/edit",
++ *     "delete-form" = "/calendar/event/{gcs_calendar_event}/delete",
+  *   },
+  * )
+  */
+@@ -161,6 +163,21 @@ class CalendarEvent extends ContentEntityBase implements
+     return $this->get('event_id')->value;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function setCalendarId($calendarEntityId) {
++    $this->set('calendar', $calendarEntityId);
++    return $this;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getCalendarId() {
++    return $this->get('calendar')->target_id;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -194,10 +211,9 @@ class CalendarEvent extends ContentEntityBase implements
+       ->setDisplayConfigurable('view', TRUE);
+ 
+     $fields['name'] = BaseFieldDefinition::create('string')
+-      ->setLabel(t('Name'))
++      ->setLabel(t('Event Name'))
+       ->setDescription(t(
+-        'The name of the event. This field is read-only, and should be changed
+-        in Google Calendar.'
++        'The name of the event.'
+       ))
+       ->setSettings([
+         'max_length' => 50,
+@@ -217,10 +233,9 @@ class CalendarEvent extends ContentEntityBase implements
+       ->setDisplayConfigurable('view', TRUE);
+ 
+     $fields['location'] = BaseFieldDefinition::create('string')
+-      ->setLabel(t('Location'))
++      ->setLabel(t('Remote URL'))
+       ->setDescription(t(
+-        'Event Location.  This field is read-only, and should be changed in
+-        Google Calendar.'
++        'Event URL.'
+       ))
+       ->setSettings([
+         'max_length' => 255,
+@@ -258,7 +273,7 @@ class CalendarEvent extends ContentEntityBase implements
+     $fields['description'] = BaseFieldDefinition::create('text_long')
+       ->setLabel(t('Description'))
+       ->setDescription(t(
+-        'This field is read-only, and should be changed in Google Calendar.'
++        'The event description.'
+       ))
+       ->setSettings([
+         'max_length' => 50,
+@@ -280,10 +295,9 @@ class CalendarEvent extends ContentEntityBase implements
+     $fields['start_date'] = BaseFieldDefinition::create('timestamp')
+       ->setLabel(t('Start Date'))
+       ->setDescription(t(
+-        'Event Start Date.  This field is read-only, and should be changed in
+-        Google Calendar.'
++        'Event Start Date.'
+       ))
+-      ->setRequired(TRUE)
++      ->setRequired(FALSE)
+       ->setDisplayOptions('view', [
+         'label' => 'above',
+         'type' => 'timestamp',
+@@ -299,10 +313,9 @@ class CalendarEvent extends ContentEntityBase implements
+     $fields['end_date'] = BaseFieldDefinition::create('timestamp')
+       ->setLabel(t('End Date'))
+       ->setDescription(t(
+-        'Event End Date.  This field is read-only, and should be changed in
+-        Google Calendar.'
++        'Event End Date.'
+       ))
+-      ->setRequired(TRUE)
++      ->setRequired(FALSE)
+       ->setDisplayOptions('view', [
+         'label' => 'above',
+         'type' => 'timestamp',
+diff --git a/src/Form/CalendarEventDeleteForm.php b/src/Form/CalendarEventDeleteForm.php
+index 2729f19..6e10cd3 100755
+--- a/src/Form/CalendarEventDeleteForm.php
++++ b/src/Form/CalendarEventDeleteForm.php
+@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+ use Drupal\google_calendar_service\CalendarEditEvents;
+ use Drupal\google_calendar_service\Entity\Calendar;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
++use Drupal\Core\Entity\EntityRepositoryInterface;
+ 
+ /**
+  * Provides a form for deleting Google Calendar Event entities.
+@@ -27,6 +28,8 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
+   /**
+    * CalendarEventDeleteForm constructor.
+    *
++   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
++   *   The entity repository.
+    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+    *   The entity type manager.
+    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
+@@ -37,13 +40,15 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
+    *   The calendar edit events.
+    */
+   public function __construct(
+-    EntityTypeManagerInterface $entity_type_manager,
++    EntityRepositoryInterface $entity_repository,
+     EntityTypeBundleInfoInterface $bundle_info = NULL,
+     TimeInterface $time = NULL,
+-    CalendarEditEvents $editEvent) {
++    CalendarEditEvents $editEvent,
++    EntityTypeManagerInterface $entity_type_manager) {
+ 
+-    parent::__construct($entity_type_manager, $bundle_info, $time);
++    parent::__construct($entity_repository, $bundle_info, $time);
+     $this->editEvent = $editEvent;
++    $this->entityTypeManager = $entity_type_manager;
+   }
+ 
+   /**
+@@ -51,10 +56,11 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
+    */
+   public static function create(ContainerInterface $container) {
+     return new static(
+-      $container->get('entity_type.manager'),
++      $container->get('entity.repository'),
+       $container->get('entity_type.bundle.info'),
+       $container->get('datetime.time'),
+-      $container->get('google_calendar_service.edit_events')
++      $container->get('google_calendar_service.edit_events'),
++      $container->get('entity_type.manager')
+     );
+   }
+ 
+diff --git a/src/Form/CalendarEventForm.php b/src/Form/CalendarEventForm.php
+index 226ef5a..a1de5a0 100755
+--- a/src/Form/CalendarEventForm.php
++++ b/src/Form/CalendarEventForm.php
+@@ -14,6 +14,7 @@ use Drupal\google_calendar_service\Entity\Calendar;
+ use Google_Service_Exception;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ use Drupal\Core\TempStore\PrivateTempStoreFactory;
++use Drupal\Core\Entity\EntityRepositoryInterface;
+ 
+ /**
+  * Form controller for Google Calendar Event edit forms.
+@@ -46,6 +47,8 @@ class CalendarEventForm extends ContentEntityForm {
+   /**
+    * CalendarEventForm constructor.
+    *
++   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
++   *   The entity repository.
+    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+    *   The entity type manager.
+    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
+@@ -60,17 +63,19 @@ class CalendarEventForm extends ContentEntityForm {
+    *   The private store factory.
+    */
+   public function __construct(
+-    EntityTypeManagerInterface $entity_type_manager,
++    EntityRepositoryInterface $entity_repository,
+     EntityTypeBundleInfoInterface $bundle_info = NULL,
+     TimeInterface $time = NULL,
+     CalendarEditEvents $editEvent,
+     MessengerInterface $messenger,
+-    PrivateTempStoreFactory $tempstore) {
++    PrivateTempStoreFactory $tempstore,
++    EntityTypeManagerInterface $entity_type_manager) {
+ 
+-    parent::__construct($entity_type_manager, $bundle_info, $time);
++    parent::__construct($entity_repository, $bundle_info, $time);
+     $this->editEvent = $editEvent;
+     $this->messenger = $messenger;
+     $this->tempstore = $tempstore;
++    $this->entityTypeManager = $entity_type_manager;
+   }
+ 
+   /**
+@@ -78,19 +83,20 @@ class CalendarEventForm extends ContentEntityForm {
+    */
+   public static function create(ContainerInterface $container) {
+     return new static(
+-      $container->get('entity_type.manager'),
++      $container->get('entity.repository'),
+       $container->get('entity_type.bundle.info'),
+       $container->get('datetime.time'),
+       $container->get('google_calendar_service.edit_events'),
+       $container->get('messenger'),
+-      $container->get('tempstore.private')
++      $container->get('tempstore.private'),
++      $container->get('entity_type.manager')
+     );
+   }
+ 
+   /**
+    * {@inheritdoc}
+    */
+-  public function buildForm(array $form, FormStateInterface $form_state) {
++  public function buildForm(array $form, FormStateInterface $form_state, $calendar = NULL) {
+     // @var $entity \Drupal\google_calendar_service\Entity\GoogleCalendarEvent.
+     $form = parent::buildForm($form, $form_state);
+     // Get the event id.
+@@ -99,7 +105,7 @@ class CalendarEventForm extends ContentEntityForm {
+     $eventId = $entity->getEntity()->getGoogleEventId();
+     $calendarId = $entity->getEntity()->get('calendar')->getValue() ?
+       $entity->getEntity()->get('calendar')->getValue()[0]['target_id'] :
+-      NULL;
++      $calendar;
+     $form_state->set('event_id', $eventId);
+     $form_state->set('calendar_id', $calendarId);
+     $form['start_date']['#required'] = TRUE;
+@@ -136,7 +142,7 @@ class CalendarEventForm extends ContentEntityForm {
+ 
+     // Get calendar id.
+     $tempStore = $this->tempstore->get('google_calendar_service');
+-    $calendarId = $tempStore->get('calendarId');
++    $calendarId = $form_state->get('calendar_id') ?: $tempStore->get('calendarId');
+ 
+     switch ($status) {
+       case SAVED_NEW:
+@@ -212,12 +218,6 @@ class CalendarEventForm extends ContentEntityForm {
+           ]
+         ));
+     }
+-
+-    $url = Url::fromRoute(
+-      'view.gcs_calendar_events.calendar_list',
+-      ['arg_0' => $calendarId]
+-    );
+-    $form_state->setRedirectUrl($url);
+   }
+ 
+   /**
+diff --git a/src/Form/CalendarForm.php b/src/Form/CalendarForm.php
+index a9c80ea..b24939b 100755
+--- a/src/Form/CalendarForm.php
++++ b/src/Form/CalendarForm.php
+@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Messenger\MessengerInterface;
+ use Drupal\google_calendar_service\CalendarImport;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
++use Drupal\Core\Entity\EntityRepositoryInterface;
+ 
+ /**
+  * Form controller for Calendar edit forms.
+@@ -35,6 +36,8 @@ class CalendarForm extends ContentEntityForm {
+   /**
+    * CalendarForm constructor.
+    *
++   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
++   *   The entity repository.
+    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+    *   The entity type manager.
+    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
+@@ -47,15 +50,17 @@ class CalendarForm extends ContentEntityForm {
+    *   The calendar import service.
+    */
+   public function __construct(
+-    EntityTypeManagerInterface $entity_type_manager,
++    EntityRepositoryInterface $entity_repository,
+     EntityTypeBundleInfoInterface $bundle_info = NULL,
+     TimeInterface $time = NULL,
+     MessengerInterface $messenger,
+-    CalendarImport $calendar_import) {
++    CalendarImport $calendar_import,
++    EntityTypeManagerInterface $entity_type_manager) {
+ 
+-    parent::__construct($entity_type_manager, $bundle_info, $time);
++    parent::__construct($entity_repository, $bundle_info, $time);
+     $this->messenger = $messenger;
+     $this->calendarImport = $calendar_import;
++    $this->entityTypeManager = $entity_type_manager;
+   }
+ 
+   /**
+@@ -63,11 +68,12 @@ class CalendarForm extends ContentEntityForm {
+    */
+   public static function create(ContainerInterface $container) {
+     return new static(
+-      $container->get('entity_type.manager'),
++      $container->get('entity.repository'),
+       $container->get('entity_type.bundle.info'),
+       $container->get('datetime.time'),
+       $container->get('messenger'),
+-      $container->get('google_calendar_service.import_events')
++      $container->get('google_calendar_service.import_events'),
++      $container->get('entity_type.manager')
+     );
+   }
+ 
+diff --git a/src/Form/CalendarSettingsForm.php b/src/Form/CalendarSettingsForm.php
+index ac41a0e..affdb57 100755
+--- a/src/Form/CalendarSettingsForm.php
++++ b/src/Form/CalendarSettingsForm.php
+@@ -164,7 +164,7 @@ class CalendarSettingsForm extends ConfigFormBase {
+       $form['client_secret'] = [
+         '#type' => 'managed_file',
+         '#title' => $this->t('Client Secret File'),
+-        '#upload_location' => 'public://google-calendar-service/',
++        '#upload_location' => 'private://google-calendar-service/',
+         '#default_value' => "",
+         '#description' => $this->t(
+           'Client Secret JSON file downloaded from Google Calendar.'
+@@ -196,9 +196,11 @@ class CalendarSettingsForm extends ConfigFormBase {
+     $config = $this->config('google_calendar_service.default');
+ 
+     // Check of file has been uploaded corectly and set it permanently.
+-    $file = $this->entityManager->getStorage('file')->load(
+-      reset($form_state->getValue('client_secret'))
+-    );
++    if ($form_state->getValue('client_secret')) {
++      $file = $this->entityManager->getStorage('file')->load(
++        reset($form_state->getValue('client_secret'))
++      );
++    }
+ 
+     if ($file) {
+       $file->setPermanent();
