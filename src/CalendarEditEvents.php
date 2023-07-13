@@ -182,18 +182,6 @@ class CalendarEditEvents {
       $event->setDescription($eventDescription);
     }
 
-//$attendeeNew = ['email' => 'eliotwsc@umich.edu',];
-$attendeeNew = new Google_Service_Calendar_EventAttendee();
-$attendeeNew->setEmail('eliotwsc@umich.edu');
-//$attendeeNew->setResponseStatus('accepted');
-//$attendeeNew->setOrganizer(true);
-//dpm($attendeeNew);
-$attendees = $event->getAttendees();
-dpm($attendees);
-//$attendees = $attendees ?? [];
-//array_push($attendees,$attendeeNew);
-$event->setAttendees($attendeeNew);
-
     try {
       return $this->service->events->insert($calendarId, $event);
     }
