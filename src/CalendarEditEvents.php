@@ -9,7 +9,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Exception;
-use Google_Service_Calendar_EventAttendee;
 
 /**
  * Class CalendarImport.
@@ -112,26 +111,11 @@ class CalendarEditEvents {
       $event->setEnd($end);
     }
 
-$attendees = $event->getAttendees();
-dpm($attendees);
-$attendeeNew = new Google_Service_Calendar_EventAttendee();
-$attendeeNew->setEmail('eliotwsc@umich.edu');
-$attendeeNew->setDisplayName('grr');
-//$attendeeNew->setResponseStatus('accepted');
-//$attendeeNew->setOrganizer(true);
-//dpm($attendeeNew);
-$attendees = $attendees ?? [];
-array_push($attendees,$attendeeNew);
-//$event->setAttendees($attendees);
-$attendees = $event->getAttendees();
-dpm($attendees);
-
     // Update calendar event service.
     try {
       return $this->service->events->update($calendarId, $eventId, $event);
     }
     catch (Google_Service_Exception $e) {
-exit(print_r($e));
       // Catch non-authorized exception.
       if ($e->getCode() == 401) {
         return FALSE;
