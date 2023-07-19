@@ -8,6 +8,7 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\user\UserInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Defines the Calendar Event entity.
@@ -342,6 +343,14 @@ class CalendarEvent extends ContentEntityBase implements
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the entity was last edited.'));
+
+    $fields['event_url'] = BaseFieldDefinition::create('string')
+      ->setLabel(new TranslatableMarkup('Event URL'))
+      ->setDescription(new TranslatableMarkup("The url for the calendar event"))
+      ->setSettings(["max_length" => 1024, "text_processing" => 0])
+      ->setDefaultValue("")
+      ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => 0])
+      ->setDisplayOptions("form", ["type" => "string_textfield", "weight" => 0]);
 
     return $fields;
   }

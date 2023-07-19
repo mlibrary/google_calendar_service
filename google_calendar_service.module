@@ -13,6 +13,14 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function google_calendar_service_gcs_calendar_event_update(EntityInterface $entity) {
+  $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($entity->get('calendar')->target_id);
+  \Drupal::service('google_calendar_service.edit_events')->setEventUrl($entity, $calendar);
+}
+
+/**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
 function google_calendar_service_inline_entity_form_entity_form_alter(array &$entity_form, &$form_state) {
@@ -180,6 +188,19 @@ function google_calendar_service_update_8200() {
     ->installFieldStorageDefinition('validate_date', 'gcs_calendar', 'google_calendar_service', $field_storage_definition);
 }
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+function google_calendar_service_update_8201() {
+  $field_storage_definition = BaseFieldDefinition::create('string')
+    ->setLabel(new TranslatableMarkup('Event URL'))
+    ->setDescription(new TranslatableMarkup("The url for the calendar event"))
+    ->setSettings(["max_length" => 1024, "text_processing" => 0])
+    ->setDefaultValue("")
+    ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => 0])
+    ->setDisplayOptions("form", ["type" => "string_textfield", "weight" => 0]);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('event_url', 'gcs_calendar_event', 'google_calendar_service', $field_storage_definition);
+}
 
 /**
  * Prepares variables for Google Calendar templates.

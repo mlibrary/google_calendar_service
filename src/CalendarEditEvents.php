@@ -194,6 +194,47 @@ class CalendarEditEvents {
   }
 
   /**
+   * Get google calendar event.
+   *
+   * @param string $calendarId
+   *   The calendar id.
+   * @param string $eventId
+   *   The event id.
+   *
+   * @return object
+   *   Return calendar event.
+   */
+  public function getGoogleCalendarEvent($calendarId, $eventId) {
+    try {
+      return $this->service->events->get($calendarId, $eventId);
+    }
+    catch (Google_Service_Exception $e) {
+      // Catch non-authorized exception.
+      if ($e->getCode() == 401) {
+        return FALSE;
+      }
+    }
+  }
+
+  /**
+   * Set event url.
+   *
+   * @param object $event
+   *   The event.
+   * @param object $calendar
+   *   The calendar.
+   */
+  public function setEventUrl($event, $calendar) {
+    $calendarId = $calendar->get('calendar_id')->value;
+    $eventId = $event->get('event_id')->value;
+    $google_event = $this->getGoogleCalendarEvent($calendarId, $eventId);
+    if ($google_event['htmlLink'] != $event->get('event_url')->value) {
+      $event->set('event_url', ['value' => $google_event['htmlLink']]);
+      $event->save();
+    }
+  }
+
+  /**
    * Delete google calendar event.
    *
    * @param string $calendarId

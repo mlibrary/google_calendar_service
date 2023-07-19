@@ -312,7 +312,7 @@ class CalendarImport {
         ],
         'description' => [
           'value' => $event['description'],
-          'format' => 'basic_html',
+          'format' => 'plain_text',
         ],
         'location' => [
           'value' => $event['location'],
@@ -324,6 +324,9 @@ class CalendarImport {
         'end_date' => [
           'value' => $end_date->setTimezone(new DateTimeZone('UTC'))
             ->getTimestamp(),
+        ],
+        'event_url' => [
+          'value' => $event['htmlLink'],
         ],
       ];
 
