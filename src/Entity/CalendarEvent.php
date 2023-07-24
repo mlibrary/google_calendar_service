@@ -352,6 +352,14 @@ class CalendarEvent extends ContentEntityBase implements
       ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => 0])
       ->setDisplayOptions("form", ["type" => "string_textfield", "weight" => 0]);
 
+    $fields['add_event_url'] = BaseFieldDefinition::create('string')
+      ->setLabel(new TranslatableMarkup('Add Event URL'))
+      ->setDescription(new TranslatableMarkup("The url to add the calendar event to your calendar"))
+      ->setSettings(["max_length" => 1024, "text_processing" => 0])
+      ->setDefaultValue("")
+      ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => 0])
+      ->setDisplayOptions("form", ["type" => "string_textfield", "weight" => 0]);
+
     return $fields;
   }
 

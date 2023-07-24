@@ -228,8 +228,12 @@ class CalendarEditEvents {
     $calendarId = $calendar->get('calendar_id')->value;
     $eventId = $event->get('event_id')->value;
     $google_event = $this->getGoogleCalendarEvent($calendarId, $eventId);
-    if ($google_event['htmlLink'] != $event->get('event_url')->value) {
+    if ($google_event['htmlLink'] != $event->get('event_url')->value || !$event->get('add_event_url')->value) {
       $event->set('event_url', ['value' => $google_event['htmlLink']]);
+      $add_event = str_replace('?', '?action=TEMPLATE&tm', $google_event['htmlLink']);
+      $add_event = str_replace('://www', '://calendar', $add_event);
+      $add_event .= '&tmsrc=' . str_replace('@', '%40', $calendarId);
+      $event->set('add_event_url', ['value' => $add_event]);
       $event->save();
     }
   }

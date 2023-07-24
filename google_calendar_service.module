@@ -11,6 +11,7 @@ use Drupal\google_calendar_service\Entity\Calendar;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Implements hook_ENTITY_TYPE_update().
@@ -123,6 +124,19 @@ function google_calendar_service_help(
   }
 }
 
+function google_calendar_service_update_8202() {
+  $field_storage_definition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Add Event URL'))
+    ->setDescription(t("The url to add the calendar event to your calendar"))
+    ->setSettings(["max_length" => 1024, "text_processing" => 0])
+    ->setDefaultValue("")
+    ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => 0])
+    ->setDisplayOptions("form", ["type" => "string_textfield", "weight" => 0]);
+
+  \Drupal::entityDefinitionUpdateManager()
+    ->installFieldStorageDefinition('add_event_url', 'gcs_calendar_event', 'google_calendar_service', $field_storage_definition);
+}
+
 /**
  * Implements hook_cron().
  *
@@ -166,7 +180,6 @@ function google_calendar_service_preprocess_calendar_event(array &$variables) {
   }
 }
 
-use Drupal\Core\Field\BaseFieldDefinition;
 function google_calendar_service_update_8200() {
   $field_storage_definition = BaseFieldDefinition::create('boolean')
     ->setLabel(t('Validate date and time is available.'))
