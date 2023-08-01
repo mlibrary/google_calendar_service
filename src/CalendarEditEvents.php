@@ -84,6 +84,10 @@ class CalendarEditEvents {
    *   The timezone.
    */
   public function patchCalendar($calendarId, $eventId, array $data, $timezone) {
+    if (empty($eventId)) {
+      $this->addCalendarEvent($calendarId, $data['name'], $data['location'], $data['description'], $data['startDate'], $data['endDate'], $timezone);
+    }
+    else {
     $event = $this->service->events->get($calendarId, $eventId);
     if (isset($data['name'])) {
       $event->setSummary($data['name']);
@@ -110,7 +114,6 @@ class CalendarEditEvents {
       $end->setTimeZone($timezone);
       $event->setEnd($end);
     }
-
     // Update calendar event service.
     try {
       return $this->service->events->update($calendarId, $eventId, $event);
@@ -120,6 +123,7 @@ class CalendarEditEvents {
       if ($e->getCode() == 401) {
         return FALSE;
       }
+    }
     }
   }
 
