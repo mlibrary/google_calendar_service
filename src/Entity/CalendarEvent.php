@@ -234,9 +234,9 @@ class CalendarEvent extends ContentEntityBase implements
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['location'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Remote URL'))
+      ->setLabel(t('Location'))
       ->setDescription(t(
-        'Event URL.'
+        'Event Location.'
       ))
       ->setSettings([
         'max_length' => 255,
