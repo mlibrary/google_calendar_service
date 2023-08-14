@@ -17,7 +17,8 @@ use Drupal\Core\Field\BaseFieldDefinition;
  * Implements hook_ENTITY_TYPE_update().
  */
 function google_calendar_service_gcs_calendar_event_update(EntityInterface $entity) {
-  $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($entity->get('calendar')->target_id);
+  $calendar_id = $entity->get('calendar')->target_id;
+  $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($calendar_id);
   \Drupal::service('google_calendar_service.edit_events')->setEventUrl($entity, $calendar);
 }
 

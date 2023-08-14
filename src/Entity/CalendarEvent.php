@@ -306,7 +306,7 @@ class CalendarEvent extends ContentEntityBase implements
       ])
       ->setDisplayOptions('form', [
         'type' => 'datetime_timestamp',
-        'weight' => -4,
+        'weight' => -5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -324,7 +324,7 @@ class CalendarEvent extends ContentEntityBase implements
       ])
       ->setDisplayOptions('form', [
         'type' => 'datetime_timestamp',
-        'weight' => -4,
+        'weight' => -5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
