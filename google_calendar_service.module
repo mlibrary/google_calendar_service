@@ -153,6 +153,7 @@ function google_calendar_service_cron() {
     $query = \Drupal::entityTypeManager()
       ->getStorage('gcs_calendar')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('status', 1);
 
     $cids = $query->execute();
