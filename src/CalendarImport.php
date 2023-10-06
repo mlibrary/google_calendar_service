@@ -245,6 +245,7 @@ class CalendarImport {
     $query = $this->entityTypeManager
       ->getStorage('gcs_calendar_event')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('calendar', $calendar->id(), 'IN')
       ->condition('event_id', $event_ids, 'IN');
 
