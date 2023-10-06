@@ -132,6 +132,7 @@ class ImportEventsForm extends FormBase {
     $query = $this->entityTypeManager
       ->getStorage('gcs_calendar')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('status', 1);
 
     $cids = $query->execute();
