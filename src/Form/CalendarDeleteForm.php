@@ -20,10 +20,10 @@ class CalendarDeleteForm extends ContentEntityDeleteForm {
     $entityName = $entity->getName();
 
     // Delete events of the calendar.
-    $events = \Drupal::entityQuery('gcs_calendar_event')->condition(
-      'calendar',
-      $entity->id()
-    )->execute();
+    $events = \Drupal::entityQuery('gcs_calendar_event')
+      ->accessCheck(FALSE)
+      ->condition('calendar', $entity->id())
+      ->execute();
 
     if (!empty($events)) {
       $storage_handler = $this->entityTypeManager->getStorage('gcs_calendar_event');
