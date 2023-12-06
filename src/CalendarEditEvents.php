@@ -88,42 +88,42 @@ class CalendarEditEvents {
       $this->addCalendarEvent($calendarId, $data['name'], $data['location'], $data['description'], $data['startDate'], $data['endDate'], $timezone);
     }
     else {
-    $event = $this->service->events->get($calendarId, $eventId);
-    if (isset($data['name'])) {
-      $event->setSummary($data['name']);
-    }
-    if (isset($data['location'])) {
-      $event->setLocation($data['location']);
-    }
-    if (isset($data['description'])) {
-      $event->setDescription($data['description']);
-    }
-
-    if (isset($data['startDate'])) {
-      $start_timestamp = strtotime($data['startDate']);
-      $start = new \Google_Service_Calendar_EventDateTime();
-      $start->setDateTime(date('c', $start_timestamp));
-      $start->setTimeZone($timezone);
-      $event->setStart($start);
-    }
-
-    if (isset($data['endDate'])) {
-      $end_timestamp = strtotime($data['endDate']);
-      $end = new \Google_Service_Calendar_EventDateTime();
-      $end->setDateTime(date('c', $end_timestamp));
-      $end->setTimeZone($timezone);
-      $event->setEnd($end);
-    }
-    // Update calendar event service.
-    try {
-      return $this->service->events->update($calendarId, $eventId, $event);
-    }
-    catch (Google_Service_Exception $e) {
-      // Catch non-authorized exception.
-      if ($e->getCode() == 401) {
-        return FALSE;
+      $event = $this->service->events->get($calendarId, $eventId);
+      if (isset($data['name'])) {
+        $event->setSummary($data['name']);
       }
-    }
+      if (isset($data['location'])) {
+        $event->setLocation($data['location']);
+      }
+      if (isset($data['description'])) {
+        $event->setDescription($data['description']);
+      }
+
+      if (isset($data['startDate'])) {
+        $start_timestamp = strtotime($data['startDate']);
+        $start = new \Google_Service_Calendar_EventDateTime();
+        $start->setDateTime(date('c', $start_timestamp));
+        $start->setTimeZone($timezone);
+        $event->setStart($start);
+      }
+
+      if (isset($data['endDate'])) {
+        $end_timestamp = strtotime($data['endDate']);
+        $end = new \Google_Service_Calendar_EventDateTime();
+        $end->setDateTime(date('c', $end_timestamp));
+        $end->setTimeZone($timezone);
+        $event->setEnd($end);
+      }
+      // Update calendar event service.
+      try {
+        return $this->service->events->update($calendarId, $eventId, $event);
+      }
+      catch (Google_Service_Exception $e) {
+        // Catch non-authorized exception.
+        if ($e->getCode() == 401) {
+          return FALSE;
+        }
+      }
     }
   }
 
@@ -209,15 +209,19 @@ class CalendarEditEvents {
    *   Return calendar event.
    */
   public function getGoogleCalendarEvent($calendarId, $eventId) {
-    try {
-      return $this->service->events->get($calendarId, $eventId);
-    }
-    catch (Google_Service_Exception $e) {
-      // Catch non-authorized exception.
-      if ($e->getCode() == 401) {
-        return FALSE;
+    $num_try = 10;
+    $tries = 0;
+    do {
+      try {
+        return $this->service->events->get($calendarId, $eventId);
       }
-    }
+      catch (Google_Service_Exception $e) {
+        $tries++;
+        sleep(1);
+        continue;
+      }
+      break;
+    } while($tries < $num_try);
   }
 
   /**

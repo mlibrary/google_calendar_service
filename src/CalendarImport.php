@@ -104,20 +104,9 @@ class CalendarImport {
       $sync_token = $ignore_sync_token ? NULL : $this->config->get($config_key);
 
       $google_calendar = $this->service->calendars->get($cid);
-      $startDate = $calendar->getStartDate();
-      $endDate = $calendar->getEndDate();
-      $setAll = $calendar->getSetAll();
-
-      if ($setAll == 1) {
-        $range = FALSE;
-      }
-      else {
-        $range['timeMin'] = date(DateTime::RFC3339, $startDate);
-        $range['timeMax'] = date(DateTime::RFC3339, strtotime(
-          '+1 day',
-          $endDate
-        ));
-      }
+      $old_events = strtotime('-1 day');
+      $range['timeMin'] = date(DateTime::RFC3339, $old_events);
+      $range['timeMax'] = date(DateTime::RFC3339, strtotime('+2 years'));
 
       // Init dummy page token.
       $next_page_token = NULL;
@@ -132,10 +121,7 @@ class CalendarImport {
         $next_page_token = $page->next_page_token;
         $next_sync_token = $page->next_sync_token;
         $items = $page->getItems();
-
-        if (count($items) > 0) {
-          $this->syncEvents($items, $calendar, $google_calendar->getTimeZone());
-        }
+        $this->syncEvents($items, $calendar, $google_calendar->getTimeZone(), $old_events);
 
         $page_count++;
       } while ($next_page_token && $page_count < 10);
@@ -233,12 +219,16 @@ class CalendarImport {
    * @param string $timezone
    *   The timezone.
    */
-  private function syncEvents(array $events, $calendar, $timezone) {
+  private function syncEvents(array $events, $calendar, $timezone, $old_events) {
     // Get list of event Ids.
     $event_ids = [];
 
     foreach ($events as $event) {
       $event_ids[] = $event['id'];
+    }
+
+    if (empty($event_ids)) {
+      $event_ids[] = 0;
     }
 
     // Query to get list of existing events.
@@ -262,11 +252,46 @@ class CalendarImport {
     }
 
     // Delete events if are not in the $events.
+    $deleted_event_ids = [];
     if (!empty($existent_event_ids)) {
-      $this->database->delete('gcs_calendar_event')
+      $deleted_event_ids = $this->entityTypeManager
+        ->getStorage('gcs_calendar_event')
+        ->getQuery()
+        ->accessCheck(FALSE)
         ->condition('calendar', $calendar->id(), 'IN')
         ->condition('id', array_values($existent_event_ids), 'NOT IN')
+        ->condition('start_date', $old_events, '>=')
         ->execute();
+    }
+    else {
+      $deleted_event_ids = $this->entityTypeManager
+        ->getStorage('gcs_calendar_event')
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('calendar', $calendar->id(), 'IN')
+        ->condition('start_date', $old_events, '>=')
+        ->execute();
+    }
+    $deleted_events = $this->entityTypeManager
+      ->getStorage('gcs_calendar_event')
+      ->loadMultiple($deleted_event_ids);
+    foreach ($deleted_events as $deleted_event) {
+      //verify event has session to make sure outside events not deleted.
+      $node = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
+        'type' => 'library_instruction_session',
+        'field_session_details' => $deleted_event->id(),
+      ]);
+      $message[] = \Drupal\Core\Render\Markup::create('orphaned event likely created outside sali');
+      if (count($node) > 1) {
+        custom_uml_mail_send_mail('library-sali@umich.edu', 'library-sali@umich.edu', 'Event ID '.$deleted_event->id().' has more than 1 associated session', $message, 'custom_sali_mail_error');
+      }
+      elseif (!$node || empty($node)) {
+        custom_uml_mail_send_mail('library-sali@umich.edu', 'library-sali@umich.edu', 'Event ID '.$deleted_event->id().' has no associated sessions on import', $message, 'custom_sali_mail_error');
+      }
+      else {
+        $deleted_event->delete();
+        //see custom_post_multistep_gcs_calendar_event_delete
+      }
     }
 
     // Iterate over events and update Drupal nodes accordingly.

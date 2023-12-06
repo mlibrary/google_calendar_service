@@ -12,6 +12,8 @@ use Drupal\views\ViewExecutable;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Google_Service_Exception;
+use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
  * Implements hook_ENTITY_TYPE_update().
@@ -19,7 +21,9 @@ use Drupal\Core\Field\BaseFieldDefinition;
 function google_calendar_service_gcs_calendar_event_update(EntityInterface $entity) {
   $calendar_id = $entity->get('calendar')->target_id;
   $calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($calendar_id);
-  \Drupal::service('google_calendar_service.edit_events')->setEventUrl($entity, $calendar);
+  if ($calendar) {
+    \Drupal::service('google_calendar_service.edit_events')->setEventUrl($entity, $calendar);
+  }
 }
 
 /**
@@ -36,8 +40,6 @@ function google_calendar_service_inline_entity_form_entity_form_alter(array &$en
     $form_state->setSubmitHandlers($submit_handlers);
   }
 }
-
-use Drupal\Core\Datetime\DrupalDateTime;
 
 function _save_google_event_form_submit(array &$form, $form_state) {
   $start_date = $form_state->getValue('field_session_details')[0]['inline_entity_form']['start_date'][0]['value'];
@@ -62,6 +64,7 @@ function _save_google_event_form_submit(array &$form, $form_state) {
       $old_calendar = \Drupal::entityTypeManager()->getStorage('gcs_calendar')->load($old_calendar_id);
       $old_calendarId = $old_calendar->get('calendar_id')->value;
       $editEventService->deleteGoogleCalendar($old_calendarId, $event_id);
+      $form['#entity']->get('calendar')->setValue(['target_id' => $calendar_id]);
       $event_id = NULL;
       $form['#entity']->get('event_id')->setValue([]);
     }
@@ -72,7 +75,13 @@ function _save_google_event_form_submit(array &$form, $form_state) {
       $data['description'] = $description;
       $data['startDate'] = $start_date;
       $data['endDate'] = $end_date;
-      $editEventService->patchCalendar($calendarId, $event_id, $data, $timezone);
+      try {
+        $editEventService->patchCalendar($calendarId, $event_id, $data, $timezone);
+      }
+      catch(Google_Service_Exception $e) {
+        $event = $editEventService->addCalendarEvent($calendarId, $name, $location, $description, $start_date, $end_date, $timezone);
+        $form['#entity']->get('event_id')->setValue([$event->id]);
+      }
     }
     else {
       $event = $editEventService->addCalendarEvent($calendarId, $name, $location, $description, $start_date, $end_date, $timezone);
@@ -99,7 +108,10 @@ function _validate_time_save_google_event(array $form, $form_state) {
       $event_id = $form['#entity']->get('event_id')->value;
     }
     $time_available = $editEventService->verifyTimeGoogleCalendar($calendarId, $start_date, $end_date, $event_id);
-    //Error message set in verifyTimeGoogleCalendar method.
+    if (!$time_available) {
+      //Error message set in verifyTimeGoogleCalendar method also but not working with some calendars.
+      $form_state->setErrorByName('field_session_details', t('The event times are already taken. Please select a different calendar, day or time.'));
+    }
   }
 }
 
@@ -160,7 +172,8 @@ function google_calendar_service_cron() {
 
     $calendars = Calendar::loadMultiple($cids);
     foreach ($calendars as $calendar) {
-      $queue->createItem($calendar);
+//      $queue->createItem($calendar);
+      \Drupal::service('google_calendar_service.import_events')->import($calendar);
     }
   }
 }
