@@ -108,7 +108,7 @@ function _validate_time_save_google_event(array $form, $form_state) {
       $event_id = $form['#entity']->get('event_id')->value;
     }
     $time_available = $editEventService->verifyTimeGoogleCalendar($calendarId, $start_date, $end_date, $event_id);
-    if (!$time_available) {
+    if (!$time_available && $calendar->get('validate_date')->value) {
       //Error message set in verifyTimeGoogleCalendar method also but not working with some calendars.
       $form_state->setErrorByName('field_session_details', t('The event times are already taken. Please select a different calendar, day or time.'));
     }

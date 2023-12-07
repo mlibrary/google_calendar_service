@@ -77,7 +77,8 @@ class CalendarEventDeleteForm extends ContentEntityDeleteForm {
     $eventId = $entity->getGoogleEventId();
     $eventName = $entity->getName();
 
-    $this->editEvent->deleteGoogleCalendar($calendarEmail, $eventId);
+//Lets not delete gcal events from sali.
+//    $this->editEvent->deleteGoogleCalendar($calendarEmail, $eventId);
 
     return $this->t('The calendar event %title has been deleted.', [
       '%title' => $eventName,

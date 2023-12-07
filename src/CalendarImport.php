@@ -357,9 +357,12 @@ class CalendarImport {
       ];
 
       if (!$event_entity) {
+/*
+//Lets not create sali event for gcal events that arent in sali.
         $event_entity = $this->entityTypeManager
           ->getStorage('gcs_calendar_event')
           ->create($fields);
+*/
       }
       else {
         // Update the existing node in place.
