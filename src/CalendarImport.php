@@ -369,10 +369,8 @@ class CalendarImport {
         foreach ($fields as $key => $value) {
           $event_entity->set($key, $value);
         }
+        $event_entity->save();
       }
-
-      // Save it!
-      $event_entity->save();
     }
   }
 
